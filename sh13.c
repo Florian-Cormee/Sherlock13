@@ -290,13 +290,13 @@ int main(int argc, char ** argv) {
 			switch (gbuffer[0]) {
 				// Message 'I' : le joueur recoit son Id
 				case 'I':
-					// RAJOUTER DU CODE ICI
+					// RAJOUTER DU CODE ICI //A Verifier
 					// "I %d"
 					gId = atoi(gbuffer+2);
 					break;
 				// Message 'L' : le joueur recoit la liste des joueurs
 				case 'L':
-					// RAJOUTER DU CODE ICI
+					// RAJOUTER DU CODE ICI //A Verifier
 					// "L %s %s %s %s"
 					char *buff = strtok(gbuffer," ");
 					buff = strtok(NULL," ");
@@ -309,19 +309,29 @@ int main(int argc, char ** argv) {
 					break;
 				// Message 'D' : le joueur recoit ses trois cartes
 				case 'D':
-					// RAJOUTER DU CODE ICI
-	
+					// RAJOUTER DU CODE ICI //A Verifier
+					// "D %d %d %d"
+					char *buff = strtok(gbuffer," ");
+					buff = strtok(NULL," ");
+					size_t indice = 0;
+					while(buff!=NULL) {
+						b[indice] = atoi(buff);
+						buff = strtok(NULL," ");
+						indice++;
+					}
 					break;
 				// Message 'M' : le joueur recoit le n° du joueur courant
 				// Cela permet d'affecter goEnabled pour autoriser l'affichage du bouton go
 				case 'M':
-					// RAJOUTER DU CODE ICI
-	
+					// RAJOUTER DU CODE ICI //A Continuer
+					// "M %d"
+					size_t num = atoi(gbuffer+2);
 					break;
 				// Message 'V' : le joueur recoit une valeur de tableCartes
 				case 'V':
-					// RAJOUTER DU CODE ICI
-	
+					// RAJOUTER DU CODE ICI //A Continuer
+					// "V %d"
+					size_t val = atoi(gbuffer+2);
 					break;
 			}
 			synchro=0;
