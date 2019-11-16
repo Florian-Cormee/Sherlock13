@@ -238,7 +238,7 @@ int main(int argc, char ** argv) {
 					if ((mx<200) && (my<50) && (connectEnabled==1)) {
 						sprintf(sendBuffer,"C %s %d %s",gClientIpAddress,gClientPort,gName);
 
-						// RAJOUTER DU CODE ICI
+						// RAJOUTER DU CODE ICI //A Commencer
 
 						connectEnabled=0;
 					} else if ((mx>=0) && (mx<200) && (my>=90) && (my<330)) {
@@ -259,17 +259,17 @@ int main(int argc, char ** argv) {
 						if (guiltSel!=-1) {
 							sprintf(sendBuffer,"G %d %d",gId, guiltSel);
 
-							// RAJOUTER DU CODE ICI
+							// RAJOUTER DU CODE ICI //A Commencer
 
 						} else if ((objetSel!=-1) && (joueurSel==-1)) {
 							sprintf(sendBuffer,"O %d %d",gId, objetSel);
 
-						// RAJOUTER DU CODE ICI
+						// RAJOUTER DU CODE ICI //A Commencer
 
 						} else if ((objetSel!=-1) && (joueurSel!=-1)) {
 							sprintf(sendBuffer,"S %d %d %d",gId, joueurSel,objetSel);
 
-							// RAJOUTER DU CODE ICI
+							// RAJOUTER DU CODE ICI //A Commencer
 
 						}
 					} else {
