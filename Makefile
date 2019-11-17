@@ -22,7 +22,9 @@ ifeq ($(MODE), DEBUG)
 	CFLAGS += $(DEBUG_FLAGS)
 endif
 
-all: build_client build_server
+all: client server
+
+.PHONY: server clean msproper
 
 client: sh13.o
 	@echo "Linking $^ & libraries.."
@@ -30,21 +32,14 @@ client: sh13.o
 	@echo "Build of the client done!"
 	@echo ""
 
-server: cartes.o com.o server.o
-	@echo "Linking $^ & libraries.."
-	@$(CC) $(CFLAGS) -o $(SERVER_NAME) $^ $(CLIBS)
-	@echo "Build of the server done!"
-	@echo ""
-
-%.o : %.c
-	@echo "Compiling $<.."
-	@$(CC) $(CFLAGS) -c $< $(CLIBS)
+server:
+	$(MAKE) -C server/ server
 
 clean:
-	rm -rf *.o
+	$(MAKE) -C server/ $@
 
-msproper: clean
-	rm -rf $(CLIENT_NAME) $(SERVER_NAME)
+msproper:
+	$(MAKE) -C server/ $@
 
 run_all: run_server run_client1 run_client2 run_client3 run_client4
 run_server: server
