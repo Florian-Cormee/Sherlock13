@@ -92,7 +92,6 @@ void on_msg_in_connection_state(char buffer[256]) {
     char clientName[256];
     int clientPort;
     char com;
-    char reply[256];
     int id;
 
     switch (buffer[0]) {
@@ -134,7 +133,7 @@ void on_msg_in_connection_state(char buffer[256]) {
         if (nbClients == 4) {
             for (size_t id = 0; id < 4; id++) {
                 // On envoie ses cartes au joueur 'id',
-                sendCards(id, tableCartes + (id * 3));
+                sendCards(id, (int *)(tableCartes + (id * 3)));
                 // ainsi que la ligne qui lui correspond dans tableCartes
                 for (size_t j = 0; j < 8; j++) {
                     sendCardValue(id, id, j, tableCartes[id][j]);
@@ -158,7 +157,6 @@ void end_round() {
 
 void on_msg_in_playing_state(char buffer[256]) {
     char com;
-    char reply[256];
 
     switch (buffer[0]) {
     case 'G': {

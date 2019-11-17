@@ -1,4 +1,6 @@
 #include "msg.h"
+
+#include <stdio.h>
 #include "com.h"
 
 void broadcastCurrentPlayer(int t_currentPlayer) {
