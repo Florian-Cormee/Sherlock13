@@ -15,11 +15,11 @@ ifeq ($(MODE), DEBUG)
 	CFLAGS += $(DEBUG_FLAGS)
 endif
 
-all: build_client
+all: client
 
 client: sh13.o
 	@echo "Linking $^ & libraries.."
-	@$(CC) $(CFLAGS) -o $(CLIENT_NAME) $^ $(CLIBS)
+	@$(CC) $(CFLAGS) -o ../$(CLIENT_NAME) $^ $(CLIBS)
 	@echo "Build of the client done!"
 	@echo ""
 
