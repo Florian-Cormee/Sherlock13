@@ -301,7 +301,7 @@ int main(int argc, char ** argv) {
 				case 'L':
 					// RAJOUTER DU CODE ICI //A Verifier
 					// "L %s %s %s %s"
-					sscanf(gbuffer+2, "%s %s %s %s", gNames, gNames+1, gNames+2, gNames+3);
+					sscanf(gbuffer+2, "%s %s %s %s", *gNames, *(gNames+1), *(gNames+2), *(gNames+3));
 					break;
 				// Message 'D' : le joueur recoit ses trois cartes
 				case 'D':
@@ -311,23 +311,25 @@ int main(int argc, char ** argv) {
 					break;
 				// Message 'M' : le joueur recoit le n° du joueur courant
 				// Cela permet d'affecter goEnabled pour autoriser l'affichage du bouton go
-				case 'M':
-					// RAJOUTER DU CODE ICI //A Verifier
-					// "M %d"
-					size_t num = atoi(gbuffer+2);
-					if(num==gId) {
-						goEnabled = 1;
+				case 'M': {
+						// RAJOUTER DU CODE ICI //A Verifier
+						// "M %d"
+						size_t num = atoi(gbuffer+2);
+						if(num==gId) {
+							goEnabled = 1;
+						}
 					}
 					break;
 				// Message 'V' : le joueur recoit une valeur de tableCartes
-				case 'V':
-					// RAJOUTER DU CODE ICI //A Verifier
-					// "V %d %d %d"
-					// Joueur Objet "Valeur"
-					int joueur, objet, valeur;
-					sscanf(gbuffer+2, "%d %d %d", &joueur, &objet, &valeur);
-					if(tableCartes[joueur][objet]<valeur) {
-						tableCartes[joueur][objet] = valeur;
+				case 'V': {
+						// RAJOUTER DU CODE ICI //A Verifier
+						// "V %d %d %d"
+						// Joueur Objet "Valeur"
+						int joueur, objet, valeur;
+						sscanf(gbuffer+2, "%d %d %d", &joueur, &objet, &valeur);
+						if(tableCartes[joueur][objet]<valeur) {
+							tableCartes[joueur][objet] = valeur;
+						}
 					}
 					break;
 			}
