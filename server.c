@@ -15,6 +15,9 @@ The port number is passed as an argument */
 int fsmServer;
 int joueurCourant;
 
+/*
+ * Prints the error and exit.
+ */
 void error(const char *msg) {
     perror(msg);
     exit(1);
