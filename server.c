@@ -4,11 +4,13 @@ The port number is passed as an argument */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include "cartes.h"
 #include "com.h"
+#include "msg.h"
 
 int fsmServer;
 int joueurCourant;
@@ -114,62 +116,41 @@ void on_msg_in_connection_state(char buffer[256]) {
         printClients();
 
         // rechercher l'id du joueur qui vient de se connecter
-
         id = findClientByName(clientName);
         printf("id=%d\n", id);
 
         // lui envoyer un message personnel pour lui communiquer son id
-
-        sprintf(reply, "I %d", id);
-        sendMessageToClient(
-            tcpClients[id].ipAddress, tcpClients[id].port, reply);
+        sendId(id);
 
         // Envoyer un message broadcast pour communiquer a tout le monde
         // la liste des joueurs actuellement connectes
-
-        sprintf(reply,
-                "L %s %s %s %s",
-                tcpClients[0].name,
-                tcpClients[1].name,
-                tcpClients[2].name,
-                tcpClients[3].name);
-        broadcastMessage(reply);
+        broadcastPlayerList();
 
         // Si le nombre de joueurs atteint 4, alors on peut lancer le
         // jeu
-
         if (nbClients == 4) {
-            // On envoie ses cartes au joueur 0, ainsi que la ligne qui
-            // lui correspond dans tableCartes On envoie ses cartes au
-            // joueur 1, ainsi que la ligne qui lui correspond dans
-            // tableCartes On envoie ses cartes au joueur 2, ainsi que
-            // la ligne qui lui correspond dans tableCartes On envoie
-            // ses cartes au joueur 3, ainsi que la ligne qui lui
-            // correspond dans tableCartes
             for (size_t id = 0; id < 4; id++) {
-                // On envoie ses cartes au joueur 'id', ainsi que la
-                // ligne qui lui correspond dans tableCartes
-                sprintf(reply,
-                        "D %d %d %d",
-                        deck[3 * id],
-                        deck[3 * id + 1],
-                        deck[3 * id + 2]);
-                sendMessageToClient(
-                    tcpClients[id].ipAddress, tcpClients[id].port, reply);
+                // On envoie ses cartes au joueur 'id',
+                sendCards(id, tableCartes + (id * 3));
+                // ainsi que la ligne qui lui correspond dans tableCartes
                 for (size_t j = 0; j < 8; j++) {
-                    sprintf(reply, "V %ld %ld %d", id, j, tableCartes[id][j]);
-                    sendMessageToClient(
-                        tcpClients[id].ipAddress, tcpClients[id].port, reply);
+                    sendCardValue(id, id, j, tableCartes[id][j]);
                 }
             }
 
             // On envoie enfin un message a tout le monde pour definir
             // qui est le joueur courant=0
-
+            broadcastCurrentPlayer(joueurCourant);
             fsmServer = 1;
         }
         break;
     }
+}
+
+void end_round() {
+    // Selection du joeur suivant & broadcast
+    joueurCourant = (joueurCourant + 1) % 4;
+    broadcastCurrentPlayer(joueurCourant);
 }
 
 void on_msg_in_playing_state(char buffer[256]) {
@@ -186,6 +167,11 @@ void on_msg_in_playing_state(char buffer[256]) {
             puts("[G] Joueur non trouve");
         } else if (guiltSel == -1) {
             puts("[G] Selection invalide");
+        } else if (joueurCourant != id) {
+            printf("[%c] %s essaie de voler le tour de %s.",
+                   com,
+                   tcpClients[id].name,
+                   tcpClients[joueurCourant].name);
         } else {
             if (deck[13] == guiltSel) {
                 printf("%s(%d) a gagné!\n", tcpClients[id].name, id);
@@ -193,6 +179,7 @@ void on_msg_in_playing_state(char buffer[256]) {
                 printf("%s(%d) a lance une fausse accusation.",
                        tcpClients[id].name,
                        id);
+                end_round();
             }
         }
     } break;
@@ -206,16 +193,18 @@ void on_msg_in_playing_state(char buffer[256]) {
             puts("[O] Identifiant invalide");
         } else if (objetSel == -1) {
             puts("[O] Selection invalide");
+        } else if (joueurCourant != id) {
+            printf("[%c] %s essaie de voler le tour de %s.",
+                   com,
+                   tcpClients[id].name,
+                   tcpClients[joueurCourant].name);
         } else {
             for (size_t i = 0; i < 4; i++) {
                 if (i == id) continue;
 
-                sprintf(reply,
-                        "V %ld %d %d",
-                        i,
-                        objetSel,
-                        tableCartes[i][objetSel] != 0 ? 1 : 0);
-                broadcastMessage(reply);
+                broadcastCardValue(
+                    i, objetSel, tableCartes[i][objetSel] > 0 ? 1 : 0);
+                end_round();
             }
         }
     } break;
@@ -231,15 +220,17 @@ void on_msg_in_playing_state(char buffer[256]) {
             puts("[S] Identifiant invalide");
         } else if (joueurSel == -1) {
             puts("[S] Selection du joueur invalide");
+        } else if (joueurCourant != id) {
+            printf("[%c] %s essaie de voler le tour de %s.",
+                   com,
+                   tcpClients[id].name,
+                   tcpClients[joueurCourant].name);
         } else if (objetSel == -1) {
             puts("[S] Selection de l'objet invalide");
         } else {
-            sprintf(reply,
-                    "V %d %d %d",
-                    joueurSel,
-                    objetSel,
-                    tableCartes[joueurSel][objetSel]);
-            broadcastMessage(reply);
+            broadcastCardValue(
+                joueurSel, objetSel, tableCartes[joueurSel][objetSel]);
+            end_round();
         }
     } break;
 
