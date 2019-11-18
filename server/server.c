@@ -146,7 +146,7 @@ void on_msg_in_connection_state(char buffer[256]) {
 
             // On envoie enfin un message a tout le monde pour definir
             // qui est le joueur courant=0
-            broadcastCurrentPlayer(joueurCourant);
+            broadcastCurrentPlayer(0);
             fsmServer = 1;
         }
         break;
