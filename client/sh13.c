@@ -336,6 +336,15 @@ int main(int argc, char ** argv) {
 						}
 					}
 					break;
+				case 'W': {
+						// RAJOUTER DU CODE ICI //A Commencer
+						// "W %d %d"
+						int idw, idcc;
+						sscanf(gbuffer+2, "%d %d", &idw, &idcc);
+						goEnabled = 0;
+						printf("Elementaire my dear %s, c'etait bien %s !\n", gNames[idw], nbnoms[idcc]);
+					}
+					break;
 			}
 			synchro=0;
 	        pthread_mutex_unlock( &mutex );
