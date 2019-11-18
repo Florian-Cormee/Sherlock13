@@ -96,18 +96,6 @@ void *fn_serveur_tcp(void *arg) {
     }
 }
 
-void *fn_chat(void *arg) {
-    char msg[128];
-    char data[256];
-
-    while (1) {
-        fgets(msg, 128, stdin);
-        if (gId >= 0) {
-            sprintf(data, "T %d %s", gId, msg);
-        }
-    }
-}
-
 void sendMessageToServer(char *ipAddress, int portno, char *mess) {
     int sockfd, n;
     struct sockaddr_in serv_addr;
@@ -136,6 +124,19 @@ void sendMessageToServer(char *ipAddress, int portno, char *mess) {
     n = write(sockfd, sendbuffer, strlen(sendbuffer));
 
     close(sockfd);
+}
+
+void *fn_chat(void *arg) {
+    char msg[128];
+    char data[256];
+
+    while (1) {
+        fgets(msg, 128, stdin);
+        if (gId >= 0) {
+            sprintf(data, "T %d %s", gId, msg);
+            sendMessageToServer(gServerIpAddress, gServerPort, data); 
+        }
+    }
 }
 
 int main(int argc, char **argv) {
@@ -394,11 +395,11 @@ int main(int argc, char **argv) {
             case 'W': {
                 // RAJOUTER DU CODE ICI //A Commencer
                 // "W %d %d"
-                int idw, idcc;
-                sscanf(gbuffer + 2, "%d %d", &idw, &idcc);
+                int idcc;
+                sscanf(gbuffer + 2, "%d %d", &gWinnerId, &idcc);
                 goEnabled = 0;
                 printf("Elementaire my dear %s, c'etait bien %s !\n",
-                       gNames[idw],
+                       gNames[gWinnerId],
                        nbnoms[idcc]);
             } break;
 
@@ -417,9 +418,9 @@ int main(int argc, char **argv) {
                            com,
                            gNames[playerId]);
                 } else {
-                    printf("%s > %s", gNames[playerId], msg);
+                    printf("%s > %s\n", gNames[playerId], msg);
                 }
-            }
+            } break;
             }
             synchro = 0;
             pthread_mutex_unlock(&mutex);
