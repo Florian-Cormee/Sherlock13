@@ -196,6 +196,7 @@ void on_msg_in_playing_state(char buffer[256]) {
                        tcpClients[id].name,
                        id);
                 sendExcluded(joueurCourant);
+                gExcludedPlayer[joueurCourant] = 1;
                 end_round();
             }
         }
