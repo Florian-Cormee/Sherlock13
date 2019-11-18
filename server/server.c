@@ -168,12 +168,14 @@ void on_msg_in_playing_state(char buffer[256]) {
         int id = -1;
         int guiltSel = -1;
         sscanf(buffer, "%c %d %d", &com, &id, &guiltSel);
+        printf("[G] com : %c id : %d guiltSel : %d\n", com, id, guiltSel);
+        printf("Coupable : %d\n", deck[13]);
         if (id == -1) {
-            puts("[G] Joueur non trouve");
+            puts("[G] Joueur non trouve\n");
         } else if (guiltSel == -1) {
-            puts("[G] Selection invalide");
+            puts("[G] Selection invalide\n");
         } else if (joueurCourant != id) {
-            printf("[%c] %s essaie de voler le tour de %s.",
+            printf("[%c] %s essaie de voler le tour de %s.\n",
                    com,
                    tcpClients[id].name,
                    tcpClients[joueurCourant].name);
@@ -181,7 +183,7 @@ void on_msg_in_playing_state(char buffer[256]) {
             if (deck[13] == guiltSel) {
                 printf("%s(%d) a gagné!\n", tcpClients[id].name, id);
             } else {
-                printf("%s(%d) a lance une fausse accusation.",
+                printf("%s(%d) a lance une fausse accusation.\n",
                        tcpClients[id].name,
                        id);
                 end_round();
