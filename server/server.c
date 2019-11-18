@@ -208,7 +208,7 @@ void on_msg_in_playing_state(char buffer[256]) {
                 if (i == id) continue;
 
                 broadcastCardValue(
-                    i, objetSel, tableCartes[i][objetSel] > 0 ? '*' : 0);
+                    i, objetSel, tableCartes[i][objetSel] > 0 ? 100 : 0);
                 end_round();
             }
         }
