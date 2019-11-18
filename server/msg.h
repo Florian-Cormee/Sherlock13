@@ -8,11 +8,13 @@
 #define M_PATTERN "M %d"
 #define V_PATTERN "V %d %d %d"
 #define W_PATTERN "W %d %d"
+#define T_PATTERN "T %d %s"
 
 void broadcastCurrentPlayer(int t_currentPlayer);
 void broadcastCardValue(int t_playerId, int t_objectId, int value);
 void broadcastPlayerList();
 void broadcastWinner(int t_playerId, int t_guildId);
+void broadcastTalk(int t_playerId, char *t_msg);
 
 void sendId(int t_recipientId);
 void sendCards(int t_playerId, int t_cards[3]);
