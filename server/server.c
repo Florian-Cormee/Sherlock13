@@ -51,10 +51,14 @@ int main(int argc, char *argv[]) {
     listen(sockfd, 5);
     clilen = sizeof(cli_addr);
 
-    printDeck();
+    // printDeck();
     melangerDeck();
     createTable();
+
+    puts("Deck:");
     printDeck();
+    puts("");
+
     joueurCourant = 0;
 
     for (i = 0; i < 4; i++) {
@@ -133,7 +137,7 @@ void on_msg_in_connection_state(char buffer[256]) {
         if (nbClients == 4) {
             for (size_t id = 0; id < 4; id++) {
                 // On envoie ses cartes au joueur 'id',
-                sendCards(id, (int *)(tableCartes + (id * 3)));
+                sendCards(id, (int *)(deck + (id * 3)));
                 // ainsi que la ligne qui lui correspond dans tableCartes
                 for (size_t j = 0; j < 8; j++) {
                     sendCardValue(id, id, j, tableCartes[id][j]);
