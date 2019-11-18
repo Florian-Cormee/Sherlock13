@@ -37,6 +37,14 @@ void broadcastWinner(int t_playerId, int t_guildId) {
     broadcastMessage(data);
 }
 
+void broadcastTalk(int t_playerId, char *t_msg) {
+    char data[DATA_SIZE];
+
+    sprintf(data, T_PATTERN, t_playerId, t_msg);
+
+    broadcastMessage(data);
+}
+
 void sendId(int t_recipientId) {
     char data[DATA_SIZE];
 

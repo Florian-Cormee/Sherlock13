@@ -239,7 +239,23 @@ void on_msg_in_playing_state(char buffer[256]) {
             end_round();
         }
     } break;
+    case 'T': {
+        int playerId = -1;
+        char msg[128];
+        memset(msg, '\0', 128);
 
+        sscanf(buffer, "%c %d %s", &com, &playerId, msg);
+
+        if (playerId == -1) {
+            puts("[T] Identifiant invalide");
+        } else if (strlen(msg) == 0) {
+            printf("[%c] %s essaie d'envoyer un message vide.",
+                   com,
+                   tcpClients[playerId].name);
+        } else {
+            broadcastTalk(playerId, msg);
+        }
+    }
     default:
         break;
     }
