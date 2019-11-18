@@ -222,8 +222,8 @@ void on_msg_in_playing_state(char buffer[256]) {
 
                 broadcastCardValue(
                     i, objetSel, tableCartes[i][objetSel] > 0 ? 100 : 0);
-                end_round();
             }
+            end_round();
         }
     } break;
 
