@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 pthread_t thread_serveur_tcp_id;
+pthread_t thread_chat_id;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 char gbuffer[256];
 char gServerIpAddress[256];
@@ -92,6 +93,18 @@ void *fn_serveur_tcp(void *arg) {
 
         while (synchro)
             ;
+    }
+}
+
+void *fn_chat(void *arg) {
+    char msg[128];
+    char data[256];
+
+    while (1) {
+        fgets(msg, 128, stdin);
+        if (gId >= 0) {
+            sprintf(data, "T %d %s", gId, msg);
+        }
     }
 }
 
@@ -243,6 +256,7 @@ int main(int argc, char **argv) {
     printf("Creation du thread serveur tcp !\n");
     synchro = 0;
     ret = pthread_create(&thread_serveur_tcp_id, NULL, fn_serveur_tcp, NULL);
+    ret = pthread_create(&thread_chat_id, NULL, &fn_chat, NULL);
 
     while (!quit) {
         if (SDL_PollEvent(&event)) {
@@ -387,6 +401,25 @@ int main(int argc, char **argv) {
                        gNames[idw],
                        nbnoms[idcc]);
             } break;
+
+            case 'T': {
+                int playerId = -1;
+                char msg[128];
+                char com;
+                memset(msg, '\0', 128);
+
+                sscanf(gbuffer, "%c %d %s", &com, &playerId, msg);
+
+                if (playerId == -1) {
+                    puts("[T] Identifiant invalide");
+                } else if (strlen(msg) == 0) {
+                    printf("[%c] %s essaie d'envoyer un message vide.",
+                           com,
+                           gNames[playerId]);
+                } else {
+                    printf("%s > %s", gNames[playerId], msg);
+                }
+            }
             }
             synchro = 0;
             pthread_mutex_unlock(&mutex);
@@ -702,7 +735,7 @@ int main(int argc, char **argv) {
         // Image de victoire / defaite
         if (gWinnerId != -2) {
             SDL_Rect dstrect = {500, 350, 200, 150};
-			int winId = gWinnerId == gId ? 1 : 0;
+            int winId = gWinnerId == gId ? 1 : 0;
             SDL_RenderCopy(renderer, texture_winImg[winId], NULL, &dstrect);
         }
         // Le bouton connect
