@@ -13,40 +13,30 @@ TERMINAL_EXEC_FLAG := -e
 
 MODE := DEBUG
 
-CC := gcc
-CFLAGS := -I/usr/include/SDL2 -Wall
-DEBUG_FLAGS := -O0 -g
-CLIBS := -lSDL2_image -lSDL2_ttf -lSDL2 -lpthread
-
 ifeq ($(MODE), DEBUG)
 	CFLAGS += $(DEBUG_FLAGS)
 endif
 
-all: build_client build_server
+all: client server
 
-client: sh13.o
-	@echo "Linking $^ & libraries.."
-	@$(CC) $(CFLAGS) -o $(CLIENT_NAME) $^ $(CLIBS)
-	@echo "Build of the client done!"
-	@echo ""
+.PHONY: server client clean msproper
 
-server: cartes.o com.o server.o
-	@echo "Linking $^ & libraries.."
-	@$(CC) $(CFLAGS) -o $(SERVER_NAME) $^ $(CLIBS)
-	@echo "Build of the server done!"
-	@echo ""
+client:
+	@$(MAKE) -C client/ $@
 
-%.o : %.c
-	@echo "Compiling $<.."
-	@$(CC) $(CFLAGS) -c $< $(CLIBS)
+server:
+	@$(MAKE) -C server/ $@
 
 clean:
-	rm -rf *.o
+	@$(MAKE) -C server/ $@
+	@$(MAKE) -C client/ $@
 
-msproper: clean
-	rm -rf $(CLIENT_NAME) $(SERVER_NAME)
+msproper:
+	@$(MAKE) -C server/ $@
+	@$(MAKE) -C client/ $@
 
 run_all: run_server run_client1 run_client2 run_client3 run_client4
+
 run_server: server
 	@echo Starting the server on port: $(SERVER_PORT)
 	@$(TERMINAL) $(TERMINAL_FLAGS) $(TERMINAL_EXEC_FLAG) "./$(SERVER_NAME) $(SERVER_PORT)"
