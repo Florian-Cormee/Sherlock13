@@ -19,4 +19,5 @@ void broadcastTalk(int t_playerId, char *t_msg);
 void sendId(int t_recipientId);
 void sendCards(int t_playerId, int t_cards[3]);
 void sendCardValue(int t_recipientId, int t_playerId,int t_objectId, int t_value);
+void sendExcluded(int t_playerId);
 #endif // !MSG_H
