@@ -29,6 +29,14 @@ void broadcastPlayerList() {
     broadcastMessage(data);
 }
 
+void broadcastWinner(int t_playerId, int t_guildId) {
+    char data[DATA_SIZE];
+
+    sprintf(data, W_PATTERN, t_playerId, t_guildId);
+
+    broadcastMessage(data);
+}
+
 void sendId(int t_recipientId) {
     char data[DATA_SIZE];
 

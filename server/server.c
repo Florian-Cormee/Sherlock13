@@ -180,6 +180,7 @@ void on_msg_in_playing_state(char buffer[256]) {
         } else {
             if (deck[12] == guiltSel) {
                 printf("%s(%d) a gagné!\n", tcpClients[id].name, id);
+                broadcastWinner(joueurCourant, deck[12])
             } else {
                 printf("%s(%d) a lance une fausse accusation.",
                        tcpClients[id].name,
