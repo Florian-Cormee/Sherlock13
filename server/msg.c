@@ -73,3 +73,12 @@ void sendCardValue(int t_recipientId,
                         tcpClients[t_recipientId].port,
                         data);
 }
+
+void sendExcluded(int t_playerId) {
+    char data[DATA_SIZE];
+
+    sprintf(data, W_PATTERN, -1, -1);
+
+    sendMessageToClient(
+        tcpClients[t_playerId].ipAddress, tcpClients[t_playerId].port, data);
+}

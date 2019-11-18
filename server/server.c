@@ -14,6 +14,7 @@ The port number is passed as an argument */
 
 int fsmServer;
 int joueurCourant;
+int gExcludedPlayer[4];
 
 /*
  * Prints the error and exit.
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     int i;
+    memset(gExcludedPlayer, 0, 4);
 
     if (argc < 2) {
         fprintf(stderr, "ERROR, no port provided\n");
@@ -155,8 +157,16 @@ void on_msg_in_connection_state(char buffer[256]) {
 
 void end_round() {
     // Selection du joeur suivant & broadcast
-    joueurCourant = (joueurCourant + 1) % 4;
-    broadcastCurrentPlayer(joueurCourant);
+    int i = 0;
+    do {
+        joueurCourant = (joueurCourant + 1) % 4;
+        i++;
+    } while (gExcludedPlayer[joueurCourant] && i < 4);
+    if (i != 4) {
+        broadcastCurrentPlayer(joueurCourant);
+    } else {
+        puts("Tous les joueurs ont été éliminé!");
+    }
 }
 
 void on_msg_in_playing_state(char buffer[256]) {
@@ -185,6 +195,7 @@ void on_msg_in_playing_state(char buffer[256]) {
                 printf("%s(%d) a lance une fausse accusation.",
                        tcpClients[id].name,
                        id);
+                sendExcluded(joueurCourant);
                 end_round();
             }
         }
