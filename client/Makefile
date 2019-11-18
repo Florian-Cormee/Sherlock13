@@ -1,4 +1,4 @@
-CLIENT_NAME := sh13.exe
+CLIENT_NAME := ../sh13.exe
 
 TERMINAL := terminator
 TERMINAL_FLAGS := --new-tab
@@ -19,7 +19,7 @@ all: client
 
 client: sh13.o
 	@echo "Linking $^ & libraries.."
-	@$(CC) $(CFLAGS) -o ../$(CLIENT_NAME) $^ $(CLIBS)
+	@$(CC) $(CFLAGS) -o $(CLIENT_NAME) $^ $(CLIBS)
 	@echo "Build of the client done!"
 	@echo ""
 
