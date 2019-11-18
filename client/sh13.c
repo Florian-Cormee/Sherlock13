@@ -275,6 +275,8 @@ int main(int argc, char ** argv) {
 							// RAJOUTER DU CODE ICI //A Continuer
 							sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
 						}
+						// RAJOUTER DU CODE ICI //A Continuer
+						//goEnabled = 0;
 					} else {
 						joueurSel=-1;
 						objetSel=-1;
@@ -295,7 +297,8 @@ int main(int argc, char ** argv) {
 				case 'I':
 					// RAJOUTER DU CODE ICI //A Verifier
 					// "I %d"
-					gId = atoi(gbuffer+2);
+					sscanf(gbuffer+2, "%d", &gId);
+					printf("Mon Id c'est %d\n", gId); 
 					break;
 				// Message 'L' : le joueur recoit la liste des joueurs
 				case 'L':
@@ -314,10 +317,11 @@ int main(int argc, char ** argv) {
 				case 'M': {
 						// RAJOUTER DU CODE ICI //A Verifier
 						// "M %d"
-						size_t num = atoi(gbuffer+2);
-						if(num==gId) {
-							goEnabled = 1;
-						}
+						size_t num;
+						sscanf(gbuffer+2, "%ld", &num);
+						printf("Num c'est %ld\n", num);
+						goEnabled = (num==gId);
+						printf("GoEnabled : %d\n", goEnabled);
 					}
 					break;
 				// Message 'V' : le joueur recoit une valeur de tableCartes
@@ -327,7 +331,7 @@ int main(int argc, char ** argv) {
 						// Joueur Objet "Valeur"
 						int joueur, objet, valeur;
 						sscanf(gbuffer+2, "%d %d %d", &joueur, &objet, &valeur);
-						if(tableCartes[joueur][objet]<valeur) {
+						if(tableCartes[joueur][objet]==-1 || tableCartes[joueur][objet]==100) {
 							tableCartes[joueur][objet] = valeur;
 						}
 					}
