@@ -146,7 +146,7 @@ void on_msg_in_connection_state(char buffer[256]) {
 
             // On envoie enfin un message a tout le monde pour definir
             // qui est le joueur courant=0
-            broadcastCurrentPlayer(0);
+            broadcastCurrentPlayer(joueurCourant);
             fsmServer = 1;
         }
         break;
@@ -208,7 +208,7 @@ void on_msg_in_playing_state(char buffer[256]) {
                 if (i == id) continue;
 
                 broadcastCardValue(
-                    i, objetSel, tableCartes[i][objetSel] > 0 ? 1 : 0);
+                    i, objetSel, tableCartes[i][objetSel] > 0 ? '*' : 0);
                 end_round();
             }
         }
