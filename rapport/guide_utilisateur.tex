@@ -2,6 +2,28 @@
 
 \subsection{Instructions de compilation}
 
+La compilation est réalisé par l'intermédiaire de fichiers Makefile. Il suffit
+d'utiliser la commande suivante pour compiler le client et le serveur.
+\begin{verbatim}
+    make all
+\end{verbatim}
+Il est possible de ne compiler que le client ou le serveur avec respectivement,
+les deux commandes suivantes:
+\begin{verbatim}
+    make client
+    make server
+\end{verbatim}
+La compilation génère des fichiers objets. La commande suivante permet de les
+supprimer:
+\begin{verbatim}
+    make clean
+\end{verbatim}
+Il est possible de supprimer en même temps les exécutables du client et du
+serveur grâce à la commande suivante:
+\begin{verbatim}
+    make msproper
+\end{verbatim}
+
 \input{utilisation_client.tex}
 
 \input{utilisation_serveur.tex}

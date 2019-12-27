@@ -1,0 +1,18 @@
+\subsection{Fonctionnement du serveur}
+
+Tout d'abord, le serveur initialise ses variables. Les adresses des clients sont
+\verb|localhost| et le port est initialisé à une valeur impossible. Le serveur
+mélange les cartes et rempli sa table de vérité. Ainsi, le coupable est tiré au
+sors et le programme comptabilise la quantité de chaque symbole que possêdera
+chacun des joueurs.
+
+Suite à cela, le programme prépare un socket en tant que serveur lié au port
+passé en argument. Dès lors, le programme attend la réception d'un message.
+
+À la réception d'un message le programme acceptera différentes commandes selon
+son état. Comme le montre la figure \ref{fig:uml_sequence}, à l'état initiale,
+le serveur n'accepte que des demandes de connection. Une fois les quatres
+connections établies, le serveur envoie ses cartes et sa ligne de la table de
+vérité à chaque joueur. Puis il annonce le début du tour du premier joueur.
+Enfin, le programme change d'état pour gérer les commandes liées au déroulement
+du jeu.

@@ -55,3 +55,6 @@ dkms.conf
 rapport/*
 !rapport/*.tex
 !rapport/figs
+
+# IDE files
+.vscode/
