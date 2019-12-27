@@ -52,7 +52,6 @@ Mkfile.old
 dkms.conf
 
 # LaTeX
-*.log
-*.aux
-*.synctex.gz
-*.toc
+rapport/*
+!rapport/*.tex
+!rapport/figs
