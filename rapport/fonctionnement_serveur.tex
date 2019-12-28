@@ -1,5 +1,7 @@
 \subsection{Fonctionnement du serveur}
 
+\subsubsection{Présentation de l'algorithme}
+
 Tout d'abord, le serveur initialise ses variables. Les adresses des clients sont
 \verb|localhost| et le port est initialisé à une valeur impossible. Le serveur
 mélange les cartes et rempli sa table de vérité. Ainsi, le coupable est tiré au
@@ -16,3 +18,31 @@ connections établies, le serveur envoie ses cartes et sa ligne de la table de
 vérité à chaque joueur. Puis il annonce le début du tour du premier joueur.
 Enfin, le programme change d'état pour gérer les commandes liées au déroulement
 du jeu.
+
+Dans ce second état, le serveur accepte les commandes d'accusation et de
+questionnement. Quand l'une d'elles est réceptionnée, le programme vérifie que
+l'expéditeur est bien le joueur actif, dans le cas contraire, un message est
+affiché dans la console et la requête est refusée. Une fois la requête
+accomplie, le serveur annonce l'identifiant du joueur suivant. L'opération se
+répète jusqu'à se qu'un jour parvienne à démasquer le coupable ou que tous les
+joueurs est été éliminé, ceci se produit lorsqu'une fausse accusation est
+lancée.
+
+\subsubsection{Répartition du code}
+
+Afin de rendre le code source du serveur plus lisible, nous l'avons découpé en
+de multiples fichiers et fonctions. Se découpage est thématique. Nous avons
+aussi essayé de ne pas avoir des fonctions de plus de 100 lignes ainsi que des
+fichiers de moins de 500 lignes de code.
+
+Ainsi, les fichiers \verb=cartes.h= et \verb=cartes.c= regroupes les fonctions
+et les variables globales liées aux cartes.
+
+La communication a été abstraite avec les fichiers \verb=com.h= et \verb=com.c=.
+Ces fichiers proposent des fonctions d'envoie de message à un client ou à tous
+les clients. Ils regroupent aussi les variables globales contenant les adresses
+des clients.
+
+Les fichiers \verb=msg.h= et \verb=msg.c= ajoute de l'abstraction vis-à-vis du
+formatage d'un message. De cette façon, \verb=server.c= ne contient que la
+boucle principale, la machine à état et les callback y correspondant.
