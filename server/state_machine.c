@@ -4,10 +4,15 @@
 
 #include "state_machine.h"
 #include <stddef.h>
+#include <stdio.h>
+#include <string.h>
 #include "cartes.h"
 #include "com.h"
 #include "logger.h"
+#include "msg.h"
 #include "server.h"
+
+eStates gState = CONNECTION;
 
 void onMsgInConnectionState(char aBuffer[256]) {
     char clientIpAddress[256];

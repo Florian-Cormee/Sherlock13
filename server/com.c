@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "logger.h"
+#include "server.h"
 
 client_t tcpClients[4];
 int nbClients = 0;
@@ -43,7 +44,7 @@ void sendMessageToClient(char *aClientIp, int aClientPort, char *aMess) {
     // Retrieves the server informations
     server = gethostbyname(aClientIp);
     if (server == NULL) {
-        error("ERROR, no such host\n");
+        errorExit("ERROR, no such host\n");
         exit(0);
     }
     // Initializes the server address informations
@@ -55,14 +56,14 @@ void sendMessageToClient(char *aClientIp, int aClientPort, char *aMess) {
     servAddr.sin_port = htons(aClientPort);
     // Connects to the server
     if (connect(sockfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0) {
-        error("ERROR connecting");
+        errorExit("ERROR connecting");
         exit(1);
     }
     // Writes the message
     sprintf(buffer, "%s\n", aMess);
     n = write(sockfd, buffer, strlen(buffer));
     if (n == -1) {
-        error("Failed to write to the socket");
+        errorExit("Failed to write to the socket");
     }
 
     close(sockfd);
