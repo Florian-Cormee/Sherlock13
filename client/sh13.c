@@ -773,10 +773,30 @@ int main(int argc, char **argv) {
         SDL_RenderPresent(renderer);
     }
 
-    SDL_DestroyTexture(texture_deck[0]);
-    SDL_DestroyTexture(texture_deck[1]);
-    SDL_FreeSurface(deck[0]);
-    SDL_FreeSurface(deck[1]);
+    //SDL_DestroyTexture(texture_deck[0]);
+    //SDL_DestroyTexture(texture_deck[1]);
+    //SDL_FreeSurface(deck[0]);
+    //SDL_FreeSurface(deck[1]);
+    for(i = 0; i < 13; i++) {
+    	SDL_DestroyTexture(texture_deck[i]);
+    	SDL_FreeSurface(deck[i]);
+    	if(i < 8) {
+    		SDL_DestroyTexture(texture_objet[i]);
+    		SDL_FreeSurface(objet[i]);
+    	   	if(i < 2) {
+    		   	SDL_DestroyTexture(texture_winImg[i]);
+    			SDL_FreeSurface(winImg[i]);
+    			if(!i) {
+    				SDL_DestroyTexture(texture_gobutton);
+    				SDL_FreeSurface(gobutton);
+    				SDL_DestroyTexture(texture_connectbutton);
+    				SDL_FreeSurface(connectbutton);
+    			}
+    		}
+    	}
+    }
+    //SDL_FreeSurface(winImg[0]);
+    //SDL_FreeSurface(winImg[1]);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
