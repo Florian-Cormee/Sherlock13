@@ -2,9 +2,10 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+#include "logger.h"
 
 client_t tcpClients[4];
 int nbClients = 0;
@@ -20,51 +21,58 @@ void printClients() {
                tcpClients[i].name);
 }
 
-int findClientByName(char *name) {
+int findClientByName(char *aName) {
     int i;
 
-    for (i = 0; i < nbClients; i++)
-        if (strcmp(tcpClients[i].name, name) == 0) return i;
+    for (i = 0; i < nbClients; i++) {
+        if (strcmp(tcpClients[i].name, aName) == 0) {
+            return i;
+        }
+    }
     return -1;
 }
 
-void sendMessageToClient(char *clientip, int clientport, char *mess) {
-    int sockfd, n;
-    struct sockaddr_in serv_addr;
-    struct hostent *server;
-    char buffer[256];
+void sendMessageToClient(char *aClientIp, int aClientPort, char *aMess) {
+    int sockfd; // Socket file descriptor
+    int n; // The amount of written chars
+    struct sockaddr_in servAddr; // The address of the client's server
+    struct hostent *server; // Server structure from the targeted client
+    char buffer[256]; // the message content buffer
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-
-    server = gethostbyname(clientip);
+    // Retrieves the server informations
+    server = gethostbyname(aClientIp);
     if (server == NULL) {
-        fprintf(stderr, "ERROR, no such host\n");
+        error("ERROR, no such host\n");
         exit(0);
     }
-    bzero((char *)&serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
+    // Initializes the server address informations
+    bzero((char *)&servAddr, sizeof(servAddr));
+    servAddr.sin_family = AF_INET;
     bcopy((char *)server->h_addr,
-          (char *)&serv_addr.sin_addr.s_addr,
+          (char *)&servAddr.sin_addr.s_addr,
           server->h_length);
-    serv_addr.sin_port = htons(clientport);
-    if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        printf("ERROR connecting\n");
+    servAddr.sin_port = htons(aClientPort);
+    // Connects to the server
+    if (connect(sockfd, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0) {
+        error("ERROR connecting");
         exit(1);
     }
-
-    sprintf(buffer, "%s\n", mess);
+    // Writes the message
+    sprintf(buffer, "%s\n", aMess);
     n = write(sockfd, buffer, strlen(buffer));
-    if(n == -1) {
-        puts("[ERROR] Failed to write to the socket");
+    if (n == -1) {
+        error("Failed to write to the socket");
     }
 
     close(sockfd);
-    printf("To %s:%d : %s\n", clientip, clientport, mess);
+    log_f(INFO, "To %s:%d : %s\n", aClientIp, aClientPort, aMess);
 }
 
-void broadcastMessage(char *mess) {
+void broadcastMessage(char *aMess) {
     int i;
 
-    for (i = 0; i < nbClients; i++)
-        sendMessageToClient(tcpClients[i].ipAddress, tcpClients[i].port, mess);
+    for (i = 0; i < nbClients; i++) {
+        sendMessageToClient(tcpClients[i].ipAddress, tcpClients[i].port, aMess);
+    }
 }
