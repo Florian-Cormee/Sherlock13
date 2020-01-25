@@ -81,10 +81,11 @@ int main(int argc, char *argv[]) {
         if (n < 0) {
             errorExit("ERROR reading from socket");
         }
-        printf("Received packet from %s:%d\nData: [%s]\n\n",
-               inet_ntoa(cli_addr.sin_addr),
-               ntohs(cli_addr.sin_port),
-               buffer);
+        log_f(DEBUG,
+              "Received packet from %s:%d\nData: [%s]",
+              inet_ntoa(cli_addr.sin_addr),
+              ntohs(cli_addr.sin_port),
+              buffer);
         // Lets the state machine handle the message
         onMsg(buffer);
 

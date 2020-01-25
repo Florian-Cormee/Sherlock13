@@ -67,7 +67,7 @@ void sendMessageToClient(char *aClientIp, int aClientPort, char *aMess) {
     }
 
     close(sockfd);
-    log_f(INFO, "To %s:%d : %s\n", aClientIp, aClientPort, aMess);
+    log_f(INFO, "To %s:%d : %s", aClientIp, aClientPort, aMess);
 }
 
 void broadcastMessage(char *aMess) {

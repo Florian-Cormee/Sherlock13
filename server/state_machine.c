@@ -30,7 +30,7 @@ void onMsgInConnectionState(char aBuffer[256]) {
                &clientPort,
                clientName);
         log_f(DEBUG,
-              "Com : '%c', ipAddress : '%s', port : '%d', name : '%s'\n",
+              "Com : '%c', ipAddress : '%s', port : '%d', name : '%s'",
               com,
               clientIpAddress,
               clientPort,
@@ -45,7 +45,7 @@ void onMsgInConnectionState(char aBuffer[256]) {
 
         // Looks for the id of the last connected player
         id = findClientByName(clientName);
-        log_f(DEBUG, "ID : %d\n", id);
+        log_f(DEBUG, "ID : %d", id);
         // Sends its identifier
         sendId(id);
         // Broadcasts the updated list of connected players
@@ -93,7 +93,7 @@ void onMsgInPlayingState(char aBuffer[256]) {
             // The request is valid
             if (deck[12] == culpritSel) {
                 // Correct guess ; notify every clients
-                log_f(INFO, "%s(%d) a gagné!\n", tcpClients[id].name, id);
+                log_f(INFO, "%s(%d) a gagné!", tcpClients[id].name, id);
                 broadcastWinner(gCurrentPlayer, deck[12]);
             } else {
                 // Wrong guess ; exclude the player and notify every clients
