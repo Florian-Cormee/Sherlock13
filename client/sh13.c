@@ -398,9 +398,13 @@ int main(int argc, char **argv) {
                 int idcc;
                 sscanf(gbuffer + 2, "%d %d", &gWinnerId, &idcc);
                 goEnabled = 0;
-                printf("Elementaire my dear %s, c'etait bien %s !\n",
-                       gNames[gWinnerId],
-                       nbnoms[idcc]);
+                if(gWinnerId==-1) {
+                    printf("Vous pourriez savourer l'air de surprise sur mon visage parce que je serais surpris %s, très surpris.\n", gNames[gId]);
+                } else {
+                    printf("Elementaire my dear %s, c'etait bien %s !\n",
+                           gNames[gWinnerId],
+                           nbnoms[idcc]);
+               }
             } break;
 
             case 'T': {
