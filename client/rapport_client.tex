@@ -1,0 +1,191 @@
+\documentclass[11pt]{article}
+%Gummi|065|=)
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+
+\definecolor{Zgris}{rgb}{0.87,0.85,0.85}
+
+\newsavebox{\BBbox}
+\newenvironment{DDbox}[1]{
+\begin{lrbox}{\BBbox}\begin{minipage}{\linewidth}}
+{\end{minipage}\end{lrbox}\noindent\colorbox{Zgris}{\usebox{\BBbox}} \\
+[.5cm]}
+
+\title{\textbf{Explication du code : Partie client}}
+\author{Florian Cormée\\
+		Hugo Duarte}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Interaction Graphique et Communication Serveur}
+
+On s'interresse aux interactions de l'utilisateur avec l'environnement graphique et la communication de ces infos au serveur.\\
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+case SDL_MOUSEBUTTONDOWN:
+	SDL_GetMouseState(&mx, &my);
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.270}
+Dans un premier temps en récupère la position de la sourie sur l'interface lors d'un clic, puis on regarde la position de la sourie plus certain etat du système. 
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+if ((mx < 200) && (my < 50) && (connectEnabled == 1)) {
+
+	sprintf(sendBuffer, "C %s %d %s", 
+	gClientIpAddress, gClientPort, gName);
+
+	sendMessageToServer(gServerIpAddress,
+	gServerPort, sendBuffer);
+	connectEnabled = 0;
+} ...
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.270}
+
+Ici par exemple, on vérifie si le bouton connecté est activé et si l'utilisateur a cliqué dessus. On envoi par la suite un message au serveur avec le token \emph{C} pour informer de la connection du joueur, enfin on désactive le bouton connecté.
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+else if ((mx >= 500) && (mx < 700) && (my >= 350) &&
+(my < 450) && (goEnabled == 1)) {
+	printf("go! joueur=%d objet=%d guilt=%d\n",
+	joueurSel, objetSel, guiltSel);
+	sprintf(sendBuffer, "G %d %d", gId, guiltSel);
+
+	sendMessageToServer(gServerIpAddress, 
+	gServerPort, sendBuffer);
+} ...
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.270}
+
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+else if ((objetSel != -1) && (joueurSel == -1)) {
+	sprintf(sendBuffer, "O %d %d", gId, objetSel);
+
+	sendMessageToServer(gServerIpAddress,
+	gServerPort, sendBuffer);
+} ...
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.270}
+
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+} else if ((objetSel != -1) && (joueurSel != -1)) {
+	sprintf(sendBuffer, "S %d %d %d", gId,
+	joueurSel, objetSel);
+
+	sendMessageToServer(gServerIpAddress,
+	gServerPort, sendBuffer);
+} ...
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.270}
+
+\section{Traitement des consignes du serveur}
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+switch (gbuffer[0]) {
+	case 'I':
+		sscanf(gbuffer + 2, "%d", &gId);
+		printf("Mon Id c'est %d\n", gId);
+		break;
+	case 'L':
+		sscanf(gbuffer + 2, "%s %s %s %s", *gNames,
+		*(gNames + 1), *(gNames + 2), *(gNames + 3));
+		break;
+	case 'D':
+		sscanf(gbuffer + 2, "%d %d %d", b, b + 1,
+		b + 2);
+		break;
+	case 'M': {
+		size_t num;
+		sscanf(gbuffer + 2, "%ld", &num);
+		printf("Num c'est %ld\n", num);
+		goEnabled = (num == gId);
+		printf("GoEnabled : %d\n", goEnabled);
+	} break;
+	case 'V': {
+		int joueur, objet, valeur;
+		sscanf(gbuffer + 2, "%d %d %d", &joueur, &objet,
+		&valeur);
+		if (tableCartes[joueur][objet] == -1 ||
+		tableCartes[joueur][objet] == 100) {
+			tableCartes[joueur][objet] = valeur;}
+	} break;
+	case 'W': {
+		int idcc;
+		sscanf(gbuffer + 2, "%d %d", &gWinnerId, &idcc);
+		goEnabled = 0;
+		printf(
+		"Elementaire my dear %s, c'etait bien %s !\n",
+		gNames[gWinnerId], nbnoms[idcc]);
+	} break;
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.346}
+
+\section{Option : Création du chat}
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+void *fn_chat(void *arg) {
+	char msg[128];
+	char data[256];
+
+	while (1) {
+		fgets(msg, 128, stdin);
+		if (gId >= 0) {
+			sprintf(data, "T %d %s", gId, msg);
+			sendMessageToServer(gServerIpAddress,
+			gServerPort, data); 
+		}
+	}
+}
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.129}
+
+Le but de cette fonction est d'offrir la possibilité aux joueurs de communiquer entre eux. Elle récupère le message saisit par l'utilisateur dans \emph{msg} et l'envoie au serveur dans \emph{data} avec la forme suivante : "\emph{T gId msg}"avec le token \emph{T} pour le serveur, l'indice de l'utilisateur \emph{gId} et le message \emph{msg}.\\
+
+Par la suite, le serveur transmet le message à tous les joueurs
+
+\begin{DDbox}{\linewidth}
+\begin{Verbatim}
+case 'T': {
+	int playerId = -1;
+	char msg[128];
+	char com;
+	memset(msg, '\0', 128);
+
+	sscanf(gbuffer, "%c %d %s", &com, &playerId, msg);
+
+	if (playerId == -1) {
+		puts("[T] Identifiant invalide");
+	} else if (strlen(msg) == 0) {
+		printf(
+		"[%c] %s essaie d'envoyer un message vide.",
+		com, gNames[playerId]);
+	} else {
+		printf("%s > %s\n", gNames[playerId], msg);
+	}
+} break;
+\end{Verbatim}
+\end{DDbox}
+\footnote{sh13.c l.406}
+
+Dans le cas où le serveur communique une message de la part d'un joueur, on recupère le message dans \emph{gbuffer}, on vérifie que l'identifiant de l'expediteur est valide et que le message n'est pas vide. Enfin, on l'affiche aux différents destinataires dans le terminal.
+
+\end{document}
