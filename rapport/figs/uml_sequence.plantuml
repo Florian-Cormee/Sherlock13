@@ -1,0 +1,68 @@
+@startuml sequence
+
+== Phase de connexion ==
+
+Client -> Server ++: C <IP> <Port> <Nom>
+note right: Ajoute le client et génère sont ID
+Server -> Client : I <ID joueur>
+Server -> Client -- : // L <Nom> <Nom> <Nom> <Nom> //
+
+== Initialisation de la partie ==
+
+... 4e connexion ...
+Server -> Server++
+
+Server -> Client : D <Id carte> <Id carte> <Id carte>
+note right : Envoie sa main au joueur
+
+Server -> Client : V <Ligne> <Colonne> <Quantité> (envoyé 8 fois)
+note right : Envoie au joueur sa ligne de la table des symboles
+
+Server -> Client --: // M <ID joueur actif> //
+note right : Envoie à tous les joueurs l'ID du joueur dont le tour commence
+
+== En cours de jeu ==
+
+... À n'importe quel moment ...
+Client -> Server ++ : T <ID joueur> <Message>
+note left Client : Récupère le message depuis la console.
+Server -> Client -- : // T <ID joueur> <Message> //
+note left : Affiche le message dans la console.
+
+... C'est au client de jouer ...
+Server -> Client ++ : // M <ID joueur> //
+Client -> Server ++ : O <ID joueur> <Colonne>
+Server -> Client : // V <ID joueur> <ID symbole> <0 || 100> //
+note right : Envoie 100 si le joueur possede une carte avec le symbole sinon 0.\n N'envoie rien concernant le joueur actif.
+Server -> Client -- : // M <ID joueur actif> //
+deactivate Client
+
+... C'est au client de jouer ...
+Server -> Client ++ : // M <ID joueur> //
+Client -> Server ++ : S <ID joueur> <ID joueur selectionné> <ID symbole>
+note left : Demande la quantité d'un symbole \n que possede un autre joueur.
+note right Server : Vérifie que c'est le tour du client.
+Server -> Client : // V <ID joueur selectionné> <ID symbole> <Quantité> //
+Server -> Client -- : // M <ID joueur actif> //
+deactivate Client
+
+... C'est au client de jouer ...
+Server -> Client ++ : // M <ID joueur> //
+Client -> Server ++ : G <ID joueur> <ID carte>
+note left : Accusation d'une carte
+note right Server : Vérifie que c'est le tour du client.
+Server -> Client -- : // W <ID joueur> <ID carte> //
+note right : La carte spéficiée n'est pas la bonne.\n Le joueur est exclu.
+Server -> Client : // M <ID joueur actif> //
+deactivate Client
+
+... C'est au client de jouer ...
+Server -> Client ++ : // M <ID joueur> //
+Client -> Server ++ : G <ID joueur> <ID carte>
+note left : Accusation d'une carte
+note right Server : Vérifie que c'est le tour du client.
+Server -> Client -- : // W <ID joueur> <ID carte> //
+note right : La carte spéficiée est la bonne.\n Fin de la partie.
+note left Client : Affiche une image selon que le client a gagné ou non
+deactivate Client
+@enduml

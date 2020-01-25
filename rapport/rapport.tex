@@ -1,0 +1,133 @@
+\documentclass[10pt,a4paper]{article}
+
+%================ Packages ================%
+\usepackage{polyglossia} % Localisation du document
+\usepackage{mathtools} % Ajout d'environnement et + pour les mathématiques
+\usepackage{amsfonts} % Ajout de polices pour les équations
+\usepackage{amssymb} % Ajout de symboles mathématiques
+\usepackage{amsthm} % Permet l'ajout de théorème
+\usepackage[load-configurations = abbreviations]{siunitx} % Support unité SI
+\usepackage{fontspec} % Changement de police
+\usepackage{xcolor} % Coloration de texte
+\usepackage{graphicx} % Ajout d'image
+\usepackage[margin=2cm, includehead, includefoot, headheight=35pt]{geometry}
+\usepackage{fancyhdr} % En-tête et pied de page
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+
+%================ Configurations ================%
+\setdefaultlanguage{french}
+\sisetup{locale = FR, detect-all, inter-unit-product ={}.{}, separate-uncertainty = true, multi-part-units=single}
+
+\graphicspath{{./figs/}}
+%\setmainfont{Calibri}
+%\setmathfont{Cambria Math}
+\everymath{\displaystyle}
+\newcommand{\titre}{Sherlock 13}
+\newcommand{\auteur}{Florian Cormée et Hugo Duarte}
+
+%================ En-tête & Pied et page ================%
+\renewcommand{\headrulewidth}{0.05pt}
+\lhead{\includegraphics[height=1cm]{logo_sorbonne.png}}
+\chead{\textbf{\titre}}
+\rhead{\includegraphics[height=1cm]{logo_polytech.png}}
+
+\lfoot{\auteur{}}
+
+%================ Nouvelles commandes ================%
+\newcommand{\donumber}{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand{\vect}[1]{\ensuremath{\overrightarrow{#1}}}
+\newcommand{\dotprod}[2]{(#1 \cdot #2)}
+\newcommand{\mat}[1]{\left[ #1 \right]}
+\newcommand{\natC}{\ensuremath{\mathbb{N}}}
+\newcommand{\relC}{\ensuremath{\mathbb{Z}}}
+\newcommand{\realC}{\ensuremath{\mathbb{R}}}
+\newcommand{\imgC}{\ensuremath{\mathbb{C}}}
+\newcommand{\abs}[1]{\ensuremath{\left| #1 \right|}}
+\newcommand{\Ind}{\ensuremath{\mathrm{Ind}}}
+\newcommand{\Res}{\ensuremath{\mathrm{Res}}}
+
+ %================ Nouveaux styles de théorèmes ================%
+\newtheoremstyle{ex}%name
+{3pt}%Space above
+{3pt}%Space below
+{\color[rgb]{0,0.4,0}}%Body font
+{}%Indent amount
+{\bfseries}%Theorem head font
+{.}%Punctuation after theorem head
+{.5em}%Space after theorem head
+{}%Theorem head spec(can be left empty, meaning ‘normal’)
+\newtheoremstyle{break}%name
+{3pt}%Space above
+{20pt}%Space below
+{}%Body font
+{}%Indent amount
+{\bfseries}%Theorem head font
+{}%Punctuation after theorem head
+{\newline}%Space after theorem head
+{}%Theorem head spec(can be left empty, meaning ‘normal’)
+
+ %================ Nouveaux théorèmes ================%
+\theoremstyle{ex}
+\newtheorem*{exemple}{Exemple}
+\theoremstyle{break}
+\newtheorem{remarque}{Remarque}
+\newtheorem{definition}{Définition}
+\newtheorem{proposition}{Propostion}
+\newtheorem{propriete}{Propriété}
+\newtheorem{corollaire}{Corollaire}
+\newtheorem{theoreme}{Théorème}
+
+%================ Début du document ================%
+\begin{document}
+\pagestyle{fancy}
+%%%
+%% Page de garde
+%%%
+\thispagestyle{empty}
+
+\includegraphics[height=2cm]{logo_sorbonne.png}
+\hfill{}
+\includegraphics[height=2cm]{logo_polytech.png}
+\vfill{}
+
+\begin{center}
+	\includegraphics[height=10cm]{sherlock-13.jpg}
+\end{center}
+\vspace{1cm}
+
+\begin{minipage}[ch]{0.9\textwidth}
+	\rule{\linewidth}{0.4pt}
+	\vspace{2pt}
+	\begin{center}
+		\textbf{\LARGE	\MakeUppercase{\titre{}}}
+	\end{center}
+	\vspace{2pt}
+	\rule{\linewidth}{0.4pt}
+	\vspace*{1cm}
+	\begin{center}
+		{\large	\auteur{}}
+	\end{center}
+\end{minipage}
+\vfill{}
+
+\newpage{}
+
+
+%%%
+%% Début du document
+%%%
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+\setcounter{page}{1}
+\input{diagramme_uml.tex}
+
+\input{guide_utilisateur.tex}
+
+\input{fonctionnement_general.tex}
+\end{document}

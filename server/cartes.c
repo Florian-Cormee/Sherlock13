@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-char *nomcartes[] = {"Sebastian Moran",
+char *cardsName[] = {"Sebastian Moran",
                      "irene Adler",
                      "inspector Lestrade",
                      "inspector Gregson",
@@ -19,17 +19,18 @@ char *nomcartes[] = {"Sebastian Moran",
 
 int deck[13] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
-int tableCartes[4][8];
+int cardsArray[4][8];
 
-void melangerDeck() {
+void shuffleDeck() {
     int i;
     int index1, index2, tmp;
 
     srand(time(NULL));
     for (i = 0; i < 1000; i++) {
+        // Picks random indexes
         index1 = rand() % 13;
         index2 = rand() % 13;
-
+        // Exchanges values from index1 and index2
         tmp = deck[index1];
         deck[index1] = deck[index2];
         deck[index2] = tmp;
@@ -46,70 +47,70 @@ void createTable() {
 
     for (i = 0; i < 4; i++)
         for (j = 0; j < 8; j++)
-            tableCartes[i][j] = 0;
+            cardsArray[i][j] = 0;
 
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 3; j++) {
             c = deck[i * 3 + j];
             switch (c) {
             case 0: // Sebastian Moran
-                tableCartes[i][7]++;
-                tableCartes[i][2]++;
+                cardsArray[i][7]++;
+                cardsArray[i][2]++;
                 break;
             case 1: // Irene Adler
-                tableCartes[i][7]++;
-                tableCartes[i][1]++;
-                tableCartes[i][5]++;
+                cardsArray[i][7]++;
+                cardsArray[i][1]++;
+                cardsArray[i][5]++;
                 break;
             case 2: // Inspector Lestrade
-                tableCartes[i][3]++;
-                tableCartes[i][6]++;
-                tableCartes[i][4]++;
+                cardsArray[i][3]++;
+                cardsArray[i][6]++;
+                cardsArray[i][4]++;
                 break;
             case 3: // Inspector Gregson
-                tableCartes[i][3]++;
-                tableCartes[i][2]++;
-                tableCartes[i][4]++;
+                cardsArray[i][3]++;
+                cardsArray[i][2]++;
+                cardsArray[i][4]++;
                 break;
             case 4: // Inspector Baynes
-                tableCartes[i][3]++;
-                tableCartes[i][1]++;
+                cardsArray[i][3]++;
+                cardsArray[i][1]++;
                 break;
             case 5: // Inspector Bradstreet
-                tableCartes[i][3]++;
-                tableCartes[i][2]++;
+                cardsArray[i][3]++;
+                cardsArray[i][2]++;
                 break;
             case 6: // Inspector Hopkins
-                tableCartes[i][3]++;
-                tableCartes[i][0]++;
-                tableCartes[i][6]++;
+                cardsArray[i][3]++;
+                cardsArray[i][0]++;
+                cardsArray[i][6]++;
                 break;
             case 7: // Sherlock Holmes
-                tableCartes[i][0]++;
-                tableCartes[i][1]++;
-                tableCartes[i][2]++;
+                cardsArray[i][0]++;
+                cardsArray[i][1]++;
+                cardsArray[i][2]++;
                 break;
             case 8: // John Watson
-                tableCartes[i][0]++;
-                tableCartes[i][6]++;
-                tableCartes[i][2]++;
+                cardsArray[i][0]++;
+                cardsArray[i][6]++;
+                cardsArray[i][2]++;
                 break;
             case 9: // Mycroft Holmes
-                tableCartes[i][0]++;
-                tableCartes[i][1]++;
-                tableCartes[i][4]++;
+                cardsArray[i][0]++;
+                cardsArray[i][1]++;
+                cardsArray[i][4]++;
                 break;
             case 10: // Mrs. Hudson
-                tableCartes[i][0]++;
-                tableCartes[i][5]++;
+                cardsArray[i][0]++;
+                cardsArray[i][5]++;
                 break;
             case 11: // Mary Morstan
-                tableCartes[i][4]++;
-                tableCartes[i][5]++;
+                cardsArray[i][4]++;
+                cardsArray[i][5]++;
                 break;
             case 12: // James Moriarty
-                tableCartes[i][7]++;
-                tableCartes[i][1]++;
+                cardsArray[i][7]++;
+                cardsArray[i][1]++;
                 break;
             }
         }
@@ -119,12 +120,14 @@ void createTable() {
 void printDeck() {
     int i, j;
 
-    for (i = 0; i < 13; i++)
-        printf("%d %s\n", deck[i], nomcartes[deck[i]]);
+    for (i = 0; i < 13; i++) {
+        printf("%d %s\n", deck[i], cardsName[deck[i]]);
+    }
 
     for (i = 0; i < 4; i++) {
-        for (j = 0; j < 8; j++)
-            printf("%2.2d ", tableCartes[i][j]);
+        for (j = 0; j < 8; j++) {
+            printf("%2.2d ", cardsArray[i][j]);
+        }
         puts("");
     }
 }
