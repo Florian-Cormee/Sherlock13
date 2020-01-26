@@ -1,6 +1,8 @@
 #ifndef COM_H
 #define COM_H
 
+#include <pthread.h>
+
 extern pthread_t thread_serveur_tcp_id;
 extern pthread_t thread_chat_id;
 extern pthread_mutex_t mutex;

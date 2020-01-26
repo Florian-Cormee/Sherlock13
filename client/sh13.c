@@ -18,13 +18,9 @@ int main(int argc, char **argv) {
     initCom();
     initGui();
 
-    int ret;
     int i;
-
     int quit = 0;
     SDL_Event event;
-    //char lname[256];
-    //int id;
 
     if (argc < 6) {
         printf("<app> <Main server ip address> <Main server port> <Client ip "
@@ -56,8 +52,8 @@ int main(int argc, char **argv) {
     SDL_Surface *gobutton;
     SDL_Surface *connectbutton;
     SDL_Surface *winImg[2];
-    loadImg(deck, objet, gobutton, connectbutton, winImg);
-    
+    loadImg(deck, objet, &gobutton, &connectbutton, winImg);
+
     SDL_Texture *texture_deck[13];
     SDL_Texture *texture_gobutton;
     SDL_Texture *texture_connectbutton;
@@ -75,14 +71,15 @@ int main(int argc, char **argv) {
     }
 
     texture_gobutton = SDL_CreateTextureFromSurface(renderer, gobutton);
-    texture_connectbutton = SDL_CreateTextureFromSurface(renderer, connectbutton);
+    texture_connectbutton =
+        SDL_CreateTextureFromSurface(renderer, connectbutton);
 
     TTF_Font *Sans = TTF_OpenFont("client/font/sans.ttf", 15);
 
     // Creation of the tcp server thread
     printf("Creation du thread serveur tcp !\n");
-    ret = pthread_create(&thread_serveur_tcp_id, NULL, fn_serveur_tcp, NULL);
-    ret = pthread_create(&thread_chat_id, NULL, &fn_chat, NULL);
+    pthread_create(&thread_serveur_tcp_id, NULL, fn_serveur_tcp, NULL);
+    pthread_create(&thread_chat_id, NULL, &fn_chat, NULL);
 
     // Main loop
     while (!quit) {
@@ -107,34 +104,22 @@ int main(int argc, char **argv) {
         }
 
         // Design
-        SDL_Rect dstrect_grille = {512 - 250, 10, 500, 350};
-        SDL_Rect dstrect_image = {0, 0, 500, 330};
-        SDL_Rect dstrect_image1 = {0, 340, 250, 330 / 2};
-
         // Cleanning + Background
         SDL_SetRenderDrawColor(renderer, 255, 230, 230, 230);
         SDL_Rect rect = {0, 0, 1024, 768};
         SDL_RenderFillRect(renderer, &rect);
-        
+
         highlightSelections(renderer);
 
-
         drawIcons(renderer, texture_objet);
-
         drawTextIcons(renderer, Sans);
-
         drawTextCharacters(renderer, Sans);
-        
         drawTab(renderer, Sans);
-
         drawCharactersIcons(renderer, texture_objet);
-
         // Afficher les suppositions
         drawX(renderer);
-
         drawGuessChart(renderer);
 
-        // SDL_RenderCopy(renderer, texture_grille, NULL, &dstrect_grille);
         drawHand(renderer, texture_deck);
 
         // Le bouton go
@@ -153,31 +138,31 @@ int main(int argc, char **argv) {
             SDL_Rect dstrect = {0, 0, 200, 50};
             SDL_RenderCopy(renderer, texture_connectbutton, NULL, &dstrect);
         }
-        
+
         drawPlayersName(renderer, Sans);
 
         SDL_RenderPresent(renderer);
     }
-    for(i = 0; i < 13; i++) {
-    	SDL_DestroyTexture(texture_deck[i]);
-    	SDL_FreeSurface(deck[i]);
+    for (i = 0; i < 13; i++) {
+        SDL_DestroyTexture(texture_deck[i]);
+        SDL_FreeSurface(deck[i]);
     }
-    
-    for(i = 0; i < 8; i++) {
-		SDL_DestroyTexture(texture_objet[i]);
-		SDL_FreeSurface(objet[i]);
+
+    for (i = 0; i < 8; i++) {
+        SDL_DestroyTexture(texture_objet[i]);
+        SDL_FreeSurface(objet[i]);
     }
-    
-    for(i = 0; i < 2; i++) {
-   	    SDL_DestroyTexture(texture_winImg[i]);
-		SDL_FreeSurface(winImg[i]);
-	}
-	
-	SDL_DestroyTexture(texture_gobutton);
-	SDL_FreeSurface(gobutton);
-	SDL_DestroyTexture(texture_connectbutton);
-	SDL_FreeSurface(connectbutton);
-	
+
+    for (i = 0; i < 2; i++) {
+        SDL_DestroyTexture(texture_winImg[i]);
+        SDL_FreeSurface(winImg[i]);
+    }
+
+    SDL_DestroyTexture(texture_gobutton);
+    SDL_FreeSurface(gobutton);
+    SDL_DestroyTexture(texture_connectbutton);
+    SDL_FreeSurface(connectbutton);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

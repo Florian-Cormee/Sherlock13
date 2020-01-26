@@ -1,17 +1,17 @@
+#include "com.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <pthread.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include "cartes.h"
-#include "com.h"
 #include "gui.h"
 
 pthread_t thread_serveur_tcp_id;
@@ -103,7 +103,9 @@ void sendMessageToServer(char *ipAddress, int portno, char *mess) {
 
     sprintf(sendbuffer, "%s\n", mess);
     n = write(sockfd, sendbuffer, strlen(sendbuffer));
-
+    if (n == -1) {
+        puts("ERROR writing");
+    }
     close(sockfd);
 }
 
@@ -115,100 +117,102 @@ void *fn_chat(void *arg) {
         fgets(msg, 128, stdin);
         if (gId >= 0) {
             sprintf(data, "T %d %s", gId, msg);
-            sendMessageToServer(gServerIpAddress, gServerPort, data); 
+            sendMessageToServer(gServerIpAddress, gServerPort, data);
         }
     }
 }
 
 void initCom() {
     int i = 0;
-    for(i = 0; i<4; i++) {
+    for (i = 0; i < 4; i++) {
         strcpy(gNames[i], "-");
     }
 }
 
-void parseMsg(char inputs[256]){
+void parseMsg(char inputs[256]) {
     switch (inputs[0]) {
-        // Message 'I' : le joueur recoit son Id
-        case 'I':
-            // RAJOUTER DU CODE ICI
-            // "I %d"
-            sscanf(inputs + 2, "%d", &gId);
-            printf("Mon Id c'est %d\n", gId);
-            break;
-        // Message 'L' : le joueur recoit la liste des joueurs
-        case 'L':
-            // RAJOUTER DU CODE ICI
-            // "L %s %s %s %s"
-            sscanf(inputs + 2,
-                   "%s %s %s %s",
-                   *gNames,
-                   *(gNames + 1),
-                   *(gNames + 2),
-                   *(gNames + 3));
-            break;
-        // Message 'D' : le joueur recoit ses trois cartes
-        case 'D':
-            // RAJOUTER DU CODE ICI
-            // "D %d %d %d"
-            sscanf(inputs + 2, "%d %d %d", hand, hand + 1, hand + 2);
-            break;
-        // Message 'M' : le joueur recoit le n° du joueur courant
-        // Cela permet d'affecter goEnabled pour autoriser l'affichage du
-        // bouton go
-        case 'M': {
-            // RAJOUTER DU CODE ICI
-            // "M %d"
-            size_t num;
-            sscanf(inputs + 2, "%ld", &num);
-            printf("Num c'est %ld\n", num);
-            goEnabled = (num == gId);
-            printf("GoEnabled : %d\n", goEnabled);
-        } break;
-        // Message 'V' : le joueur recoit une valeur de tableCartes
-        case 'V': {
-            // RAJOUTER DU CODE ICI
-            // "V %d %d %d"
-            // Joueur Objet "Valeur"
-            int joueur, objet, valeur;
-            sscanf(inputs + 2, "%d %d %d", &joueur, &objet, &valeur);
-            if (tableCartes[joueur][objet] == -1 ||
-                tableCartes[joueur][objet] == 100) {
-                tableCartes[joueur][objet] = valeur;
-            }
-        } break;
-        case 'W': {
-            // RAJOUTER DU CODE ICI
-            // "W %d %d"
-            int idcc;
-            sscanf(inputs + 2, "%d %d", &gWinnerId, &idcc);
-            goEnabled = 0;
-            if(gWinnerId==-1) {
-                printf("Vous pourriez savourer l'air de surprise sur mon visage parce que je serais surpris %s, très surpris.\n", gNames[gId]);
-            } else {
-                printf("Elementaire my dear %s, c'etait bien %s !\n",
-                       gNames[gWinnerId],
-                       nbnoms[idcc]);
-           }
-        } break;
+    // Message 'I' : le joueur recoit son Id
+    case 'I':
+        // RAJOUTER DU CODE ICI
+        // "I %d"
+        sscanf(inputs + 2, "%d", &gId);
+        printf("Mon Id c'est %d\n", gId);
+        break;
+    // Message 'L' : le joueur recoit la liste des joueurs
+    case 'L':
+        // RAJOUTER DU CODE ICI
+        // "L %s %s %s %s"
+        sscanf(inputs + 2,
+               "%s %s %s %s",
+               *gNames,
+               *(gNames + 1),
+               *(gNames + 2),
+               *(gNames + 3));
+        break;
+    // Message 'D' : le joueur recoit ses trois cartes
+    case 'D':
+        // RAJOUTER DU CODE ICI
+        // "D %d %d %d"
+        sscanf(inputs + 2, "%d %d %d", hand, hand + 1, hand + 2);
+        break;
+    // Message 'M' : le joueur recoit le n° du joueur courant
+    // Cela permet d'affecter goEnabled pour autoriser l'affichage du
+    // bouton go
+    case 'M': {
+        // RAJOUTER DU CODE ICI
+        // "M %d"
+        size_t num;
+        sscanf(inputs + 2, "%ld", &num);
+        printf("Num c'est %ld\n", num);
+        goEnabled = (num == gId);
+        printf("GoEnabled : %d\n", goEnabled);
+    } break;
+    // Message 'V' : le joueur recoit une valeur de tableCartes
+    case 'V': {
+        // RAJOUTER DU CODE ICI
+        // "V %d %d %d"
+        // Joueur Objet "Valeur"
+        int joueur, objet, valeur;
+        sscanf(inputs + 2, "%d %d %d", &joueur, &objet, &valeur);
+        if (tableCartes[joueur][objet] == -1 ||
+            tableCartes[joueur][objet] == 100) {
+            tableCartes[joueur][objet] = valeur;
+        }
+    } break;
+    case 'W': {
+        // RAJOUTER DU CODE ICI
+        // "W %d %d"
+        int idcc;
+        sscanf(inputs + 2, "%d %d", &gWinnerId, &idcc);
+        goEnabled = 0;
+        if (gWinnerId == -1) {
+            printf("Vous pourriez savourer l'air de surprise sur mon visage "
+                   "parce que je serais surpris %s, très surpris.\n",
+                   gNames[gId]);
+        } else {
+            printf("Elementaire my dear %s, c'etait bien %s !\n",
+                   gNames[gWinnerId],
+                   nbnoms[idcc]);
+        }
+    } break;
 
-        case 'T': {
-            int playerId = -1;
-            char msg[128];
-            char com;
-            memset(msg, '\0', 128);
+    case 'T': {
+        int playerId = -1;
+        char msg[128];
+        char com;
+        memset(msg, '\0', 128);
 
-            sscanf(inputs, "%c %d %s", &com, &playerId, msg);
+        sscanf(inputs, "%c %d %s", &com, &playerId, msg);
 
-            if (playerId == -1) {
-                puts("[T] Identifiant invalide");
-            } else if (strlen(msg) == 0) {
-                printf("[%c] %s essaie d'envoyer un message vide.",
-                       com,
-                       gNames[playerId]);
-            } else {
-                printf("%s > %s\n", gNames[playerId], msg);
-            }
-        } break;
+        if (playerId == -1) {
+            puts("[T] Identifiant invalide");
+        } else if (strlen(msg) == 0) {
+            printf("[%c] %s essaie d'envoyer un message vide.",
+                   com,
+                   gNames[playerId]);
+        } else {
+            printf("%s > %s\n", gNames[playerId], msg);
+        }
+    } break;
     }
 }

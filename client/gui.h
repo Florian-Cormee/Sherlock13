@@ -1,6 +1,10 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+
 extern int joueurSel;
 extern int objetSel;
 extern int guiltSel;
@@ -8,7 +12,7 @@ extern int goEnabled;
 extern int connectEnabled;
 
 void initGui();
-void loadImg(SDL_Surface * deck[13], SDL_Surface *objet[8], SDL_Surface *gobutton, SDL_Surface *connectbutton, SDL_Surface *winImg[2]);
+void loadImg(SDL_Surface * deck[13], SDL_Surface *objet[8], SDL_Surface **gobutton, SDL_Surface **connectbutton, SDL_Surface *winImg[2]);
 void onMouseButtonDownEvent();
 
 void highlightSelections(SDL_Renderer *renderer);
