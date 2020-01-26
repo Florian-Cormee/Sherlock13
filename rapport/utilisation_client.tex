@@ -4,12 +4,96 @@
 
 Le client sert à générer l'interface graphique à l'utilisateur pour lui permettre de jouer. Pour lancer le client, il faut entrer la commande suivante :
 \begin{verbatim}
-    ./sh13.exe <server ip address> <server port> <client ip address> <client port> <player name>
+./sh13.exe <server ip address> <server port> <client ip address> <client port> <player name>
 \end{verbatim}
 Tous les arguments sont obligatoires. L'adresse ip et le port du serveur doivent être ceux utilisés par le serveur lancé. L'adresse ip du client spécifié peut être localhost. Le port client spécifié doit être disponible. Par exemple, les ports 32 001, 32 002, 32 003, etc. Un nom de joueur doit être renseigné.
 
 \subsubsection{Connection au serveur}
 
+Une fois la commande exécutée, une fenêtre graphique s'ouvrira :
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=.5\linewidth]{avant_connection.png}
+    \end{center}
+     \caption{fenêtre graphique avant connection}
+    \label{fig:avant_connection}
+\end{figure}
+En cliquant sur le bouton connections, vous pourrez avoir accès aux noms des autres joueurs déjà connectés :
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=.5\linewidth]{apres_connection.png}
+    \end{center}
+   	 \caption{fenêtre graphique après connection}
+    \label{fig:après_connection}
+\end{figure}
+Une fois que le quota de joueurs connectés est atteint, la partie peut commencer !
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=.5\linewidth]{debut.png}
+    \end{center}
+     \caption{début de partie}
+    \label{fig:debut}
+\end{figure}
+
 \subsubsection{Actions disponibles}
 
+Une fois sur la partie lancée, plusieurs actions sont disponibles :
+\begin{itemize}
+  \item Bannir un personnage (à tout moment);
+  \begin{figure}[H]
+       \begin{center}
+           \includegraphics[width=.5\linewidth]{memo.png}
+           \\
+           \tiny En cliquant dans les cases à côté des noms des différents personnages, \\vous pouvez indiquer qui vous sembles présent dans les mains des différents joueurs.
+       \end{center}
+       \label{fig:memo}
+   \end{figure}
+
+  \item Savoir qui possède un symbole;
+  \begin{figure}[H]
+       \begin{center}
+           \includegraphics[width=.5\linewidth]{qui_symbole.png}
+           \\
+           \tiny En cliquant sur la case du symbole en question et en confirmant son action (en cliquant sur le bouton go), \\vous pourrez savoir quels joueurs possèdent des personnages liés à ce symbole.
+       \end{center}
+       \label{fig:qui_symbole}
+   \end{figure}
+
+  \item Savoir combien de fois un joueur possède un symbole;
+  \begin{figure}[H]
+       \begin{center}
+           \includegraphics[width=.5\linewidth]{combien_symbole.png}
+           \\
+           \tiny En cliquant sur la case du symbole en question ainsi que la case du joueur qui souhaité et enfin en confirmant son action (en cliquant sur le bouton go), \\vous pourrez savoir combien de personnage sont liés à ce symbole dans la main de l'autre joueur.
+       \end{center}
+       \label{fig:combien_symbole}
+   \end{figure}
+
+  \item Accuser un des personnages.
+  \begin{figure}[H]
+       \begin{center}
+           \includegraphics[width=.5\linewidth]{accusation.png}
+           \\
+           \tiny En cliquant sur le nom d'un personage et en confirmant son action (en cliquant sur le bouton go), \\vous lancez une accusation.
+       \end{center}
+       \label{fig:accusation}
+   \end{figure}
+
+\end{itemize}
+
+Pour ces trois dernières actions, il est nécessaire de cliquer sur le bouton go (et donc mettre fin à son tour) pour les valider.
+
+Enfin, une fausse accusation entraîne la défaite du joueur tandis que la bonne apporte sa victoire.
+
+\begin{figure}[H]
+   \begin{center}
+       \includegraphics[width=.5\linewidth]{perdre.png}
+       \includegraphics[width=.5\linewidth]{gagner.png}
+   \end{center}
+    \caption{Victoire et Défaite}
+   \label{fig:defaitevictoire}
+\end{figure}
+
 \subsubsection{Fermeture du client}
+
+Pour mettre fin au programme, il suffit de cliquer sur la croix de fermeture de la fenêtre graphique ou de sélectionner sa console et appuyer sur les touches \verb|Ctrl + C|.
