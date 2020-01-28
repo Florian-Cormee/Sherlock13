@@ -9,7 +9,7 @@ ifeq ($(MODE), DEBUG)
 	CFLAGS += $(DEBUG_FLAGS)
 endif
 
-server: cartes.o com.o server.o msg.o
+server: cartes.o com.o server.o msg.o state_machine.o logger.o
 	@echo "Linking $^ & libraries.."
 	@$(CC) $(CFLAGS) -o $(SERVER_NAME) $^ $(CLIBS)
 	@echo "Build of the server done!"

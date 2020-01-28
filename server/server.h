@@ -19,4 +19,9 @@ extern int gExcludedPlayer[4];
  */
 void endRound();
 
+/**
+ * Prints the error and exit.
+ */
+void errorExit(const char *msg);
+
 #endif // !SERVER_H

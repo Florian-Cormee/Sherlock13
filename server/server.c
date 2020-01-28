@@ -21,14 +21,6 @@
 int gCurrentPlayer;
 int gExcludedPlayer[4];
 
-/**
- * Prints the error and exit.
- */
-void error(const char *msg) {
-    perror(msg);
-    exit(1);
-}
-
 int main(int argc, char *argv[]) {
     int sockfd; // Socket's file descriptor.
     int newsockfd; // Socket's file descriptor on incoming message.
@@ -42,13 +34,12 @@ int main(int argc, char *argv[]) {
 
     // Ensures there are enough arguments.
     if (argc < 2) {
-        fprintf(stderr, "ERROR, no port provided\n");
-        exit(1);
+        errorExit("No port provided");
     }
     // Creates the socket ; exists on failure.
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        error("ERROR opening socket");
+        errorExit("ERROR opening socket");
     }
     // Initializes the server's address.
     bzero((char *)&serv_addr, sizeof(serv_addr));
@@ -58,7 +49,7 @@ int main(int argc, char *argv[]) {
     serv_addr.sin_port = htons(portno);
     // Binds the socket to the port & prepares it ; exists on failure.
     if (bind(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        error("ERROR on binding");
+        errorExit("ERROR on binding");
     }
     listen(sockfd, 5);
     clilen = sizeof(cli_addr);
@@ -70,7 +61,7 @@ int main(int argc, char *argv[]) {
     puts("");
     // Initializes active player selection variables.
     gCurrentPlayer = 0;
-    memset(gExcludedPlayer, 0, 4);
+    memset(gExcludedPlayer, 0, 4 * sizeof(int));
     // Initializes clients address as dummy values.
     for (i = 0; i < 4; i++) {
         strcpy(tcpClients[i].ipAddress, "localhost");
@@ -82,18 +73,19 @@ int main(int argc, char *argv[]) {
         // Waits for an incoming message ; exists on failure.
         newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
         if (newsockfd < 0) {
-            error("ERROR on accept");
+            errorExit("ERROR on accept");
         }
         // Reads the message's content ; exists on failure.
         bzero(buffer, 256);
         n = read(newsockfd, buffer, 255);
         if (n < 0) {
-            error("ERROR reading from socket");
+            errorExit("ERROR reading from socket");
         }
-        printf("Received packet from %s:%d\nData: [%s]\n\n",
-               inet_ntoa(cli_addr.sin_addr),
-               ntohs(cli_addr.sin_port),
-               buffer);
+        log_f(DEBUG,
+              "Received packet from %s:%d\nData: [%s]",
+              inet_ntoa(cli_addr.sin_addr),
+              ntohs(cli_addr.sin_port),
+              buffer);
         // Lets the state machine handle the message
         onMsg(buffer);
 
@@ -115,4 +107,9 @@ void endRound() {
     } else {
         warn("Tous les joueurs ont été éliminé!");
     }
+}
+
+void errorExit(const char *msg) {
+    log_err(ERROR, msg);
+    exit(1);
 }
