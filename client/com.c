@@ -123,7 +123,7 @@ void *fn_chat(void *arg) {
 }
 
 void initCom() {
-    int i = 0;
+    int i;
     for (i = 0; i < 4; i++) {
         strcpy(gNames[i], "-");
     }

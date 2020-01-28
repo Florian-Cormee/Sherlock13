@@ -14,6 +14,7 @@
 #include "gui.h"
 
 int main(int argc, char **argv) {
+    /** Initialization of global variables. */
     initCartes();
     initCom();
     initGui();
@@ -21,7 +22,7 @@ int main(int argc, char **argv) {
     int i;
     int quit = 0;
     SDL_Event event;
-
+    /** Check the number of arguments. */
     if (argc < 6) {
         printf("<app> <Main server ip address> <Main server port> <Client ip "
                "address> <Client port> <player name>\n");
@@ -108,9 +109,8 @@ int main(int argc, char **argv) {
         SDL_SetRenderDrawColor(renderer, 255, 230, 230, 230);
         SDL_Rect rect = {0, 0, 1024, 768};
         SDL_RenderFillRect(renderer, &rect);
-
+        /** Draw of the graphic elements. */
         highlightSelections(renderer);
-
         drawIcons(renderer, texture_objet);
         drawTextIcons(renderer, Sans);
         drawTextCharacters(renderer, Sans);
@@ -119,7 +119,6 @@ int main(int argc, char **argv) {
         // Afficher les suppositions
         drawX(renderer);
         drawGuessChart(renderer);
-
         drawHand(renderer, texture_deck);
 
         // Le bouton go
@@ -138,11 +137,12 @@ int main(int argc, char **argv) {
             SDL_Rect dstrect = {0, 0, 200, 50};
             SDL_RenderCopy(renderer, texture_connectbutton, NULL, &dstrect);
         }
-
+        /** draw each name of players */ 
         drawPlayersName(renderer, Sans);
 
         SDL_RenderPresent(renderer);
     }
+    /** End of the program, free of the texture and surface. */
     for (i = 0; i < 13; i++) {
         SDL_DestroyTexture(texture_deck[i]);
         SDL_FreeSurface(deck[i]);
