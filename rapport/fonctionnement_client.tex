@@ -2,14 +2,28 @@
 
 \subsubsection{Présentation de l'algorithme}
 
-Au lancement, le client initialise ses variables, se connecte au serveur et génère l'interface graphique. On rentre ensuite dans la boucle principale qui est découpé en trois partie. Dans un premier temps, le programme analyse les interactions que l'utilisateur a avec la fenêtre graphique et envoie les commandes associées au serveur. Ensuite, si une requête est reçu du serveur, il exécute les commandes associées. Enfin, il met à jour la fenêtre graphique à l'aide des nouvelles informations reçu. La boucle est quittée quand la fenêtre est fermée et les différents objets graphiques sont détruits.
+Au lancement, le client initialise ses variables, se connecte au serveur et
+génère l'interface graphique. On rentre ensuite dans la boucle principale qui
+est découpé en trois partie. Dans un premier temps, le programme analyse les
+interactions que l'utilisateur a avec la fenêtre graphique et envoie les
+commandes associées au serveur. Ensuite, si une requête est reçu du serveur, il
+exécute les commandes associées. Enfin, il met à jour la fenêtre graphique à
+l'aide des nouvelles informations reçu. La boucle est quittée quand la fenêtre
+est fermée et les différents objets graphiques sont détruits.
 
 \subsubsection{Répartition du code}
 
-Afin de rendre le code source du serveur plus lisible, nous l'avons découpé en de multiples fichiers et fonctions. Ce découpage est thématique. Nous avons aussi essayé de ne pas avoir des fonctions de plus de 100 lignes ainsi que des fichiers de moins de 500 lignes de code.
+Afin de rendre le code source du client plus lisible, nous l'avons découpé en
+de multiples fichiers et fonctions. Ce découpage est thématique. Nous avons
+aussi essayé de ne pas avoir des fonctions de plus de 100 lignes ainsi que des
+fichiers de moins de 500 lignes de code.
 
-Ainsi, les fichiers \verb=cartes.h= et \verb=cartes.c= regroupent les fonctions et les variables globales liées aux cartes.
+Ainsi, les fichiers \verb=cartes.h= et \verb=cartes.c= regroupent les fonctions
+et les variables globales liées aux cartes.
 
-La communication a été abstraite avec les fichiers \verb=com.h= et \verb=com.c=. Ces fichiers proposent des fonctions d'envoi de message au serveur.
+La communication a été abstraite avec les fichiers \verb=com.h= et \verb=com.c=.
+Ces fichiers proposent des fonctions d'envoi de message au serveur.
 
-Les fichiers \verb=gui.h= et \verb=gui.c= gère les fonctions lié à l'interface graphique ainsi que toutes les variables liés à l'environnement graphique. De cette façon, \verb=sh13.c= ne contient que la boucle principale, la machine à état et les callback y correspondant.
+Les fichiers \verb=gui.h= et \verb=gui.c= gèrent les fonctions liées à
+l'interface graphique ainsi que toutes les variables liées à l'environnement
+graphique. De cette façon, \verb=sh13.c= ne contient que la boucle principale.
