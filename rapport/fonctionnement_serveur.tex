@@ -4,9 +4,8 @@
 
 Tout d'abord, le serveur initialise ses variables. Les adresses des clients sont
 \verb|localhost| et le port est initialisé à une valeur impossible. Le serveur
-mélange les cartes et rempli sa table de vérité. Ainsi, le coupable est tiré au
-sors et le programme comptabilise la quantité de chaque symbole que possêdera
-chacun des joueurs.
+mélange les cartes et rempli sa table de vérité. sors et le programme
+comptabilise la quantité de chaque symbole que possédera chacun des joueurs.
 
 Suite à cela, le programme prépare un socket en tant que serveur lié au port
 passé en argument. Dès lors, le programme attend la réception d'un message.
@@ -25,7 +24,7 @@ l'expéditeur est bien le joueur actif, dans le cas contraire, un message est
 affiché dans la console et la requête est refusée. Une fois la requête
 accomplie, le serveur annonce l'identifiant du joueur suivant. L'opération se
 répète jusqu'à se qu'un jour parvienne à démasquer le coupable ou que tous les
-joueurs est été éliminé, ceci se produit lorsqu'une fausse accusation est
+joueurs ont été éliminé, ceci se produit lorsqu'une fausse accusation est
 lancée.
 
 \subsubsection{Répartition du code}
@@ -45,4 +44,4 @@ des clients.
 
 Les fichiers \verb=msg.h= et \verb=msg.c= ajoute de l'abstraction vis-à-vis du
 formatage d'un message. De cette façon, \verb=server.c= ne contient que la
-boucle principale, la machine à état et les callback y correspondant.
+boucle principale.
