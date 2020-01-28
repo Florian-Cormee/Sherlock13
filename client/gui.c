@@ -14,7 +14,7 @@
 #include "cartes.h"
 #include "com.h"
 
-int characterSel = -1;
+int playerSel = -1;
 int objectSel = -1;
 int guiltSel = -1;
 int goEnabled = 0;
@@ -67,13 +67,13 @@ void onMouseButtonDownEvent() {
         sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
         connectEnabled = 0;
     } else if ((mx >= 0) && (mx < 200) && (my >= 90) && (my < 330)) {
-        characterSel = (my - 90) / 60;
+        playerSel = (my - 90) / 60;
         guiltSel = -1;
     } else if ((mx >= 200) && (mx < 680) && (my >= 0) && (my < 90)) {
         objectSel = (mx - 200) / 60;
         guiltSel = -1;
     } else if ((mx >= 100) && (mx < 250) && (my >= 350) && (my < 740)) {
-        characterSel = -1;
+        playerSel = -1;
         objectSel = -1;
         guiltSel = (my - 350) / 30;
     } else if ((mx >= 250) && (mx < 300) && (my >= 350) && (my < 740)) {
@@ -89,13 +89,13 @@ void onMouseButtonDownEvent() {
 
             // RAJOUTER DU CODE ICI
             sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
-        } else if ((objectSel != -1) && (characterSel == -1)) {
+        } else if ((objectSel != -1) && (playerSel == -1)) {
             // Qui possède un Objet
             sprintf(sendBuffer, "O %d %d", gId, objectSel);
 
             // RAJOUTER DU CODE ICI
             sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
-        } else if ((objectSel != -1) && (characterSel != -1)) {
+        } else if ((objectSel != -1) && (playerSel != -1)) {
             // Combien de fois le joueur possède l'Objet
             sprintf(sendBuffer, "S %d %d %d", gId, playerSel, objectSel);
 
@@ -103,7 +103,7 @@ void onMouseButtonDownEvent() {
             sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
         }
     } else {
-        characterSel = -1;
+        playerSel = -1;
         objectSel = -1;
         guiltSel = -1;
     }
@@ -111,9 +111,9 @@ void onMouseButtonDownEvent() {
 
 void highlightSelections(SDL_Renderer *renderer) {
     // Player selection
-    if (characterSel != -1) {
+    if (playerSel != -1) {
         SDL_SetRenderDrawColor(renderer, 255, 180, 180, 255);
-        SDL_Rect rect1 = {0, 90 + characterSel * 60, 200, 60};
+        SDL_Rect rect1 = {0, 90 + playerSel * 60, 200, 60};
         SDL_RenderFillRect(renderer, &rect1);
     }
 

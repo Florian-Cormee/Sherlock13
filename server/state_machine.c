@@ -172,7 +172,8 @@ void onMsgInPlayingState(char aBuffer[256]) {
         char msg[128];
         memset(msg, '\0', 128);
 
-        sscanf(aBuffer, "%c %d %s", &com, &playerId, msg);
+        sscanf(aBuffer, "%c %d", &com, &playerId);
+        strcpy(msg, aBuffer + 3);
 
         if (playerId == -1) {
             warn("[T] Identifiant invalide");
@@ -182,6 +183,7 @@ void onMsgInPlayingState(char aBuffer[256]) {
                   com,
                   tcpClients[playerId].name);
         } else {
+            msg[strlen(msg) - 1] = '\0';
             broadcastTalk(playerId, msg);
         }
     }

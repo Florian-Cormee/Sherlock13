@@ -114,6 +114,7 @@ void *fn_chat(void *arg) {
 
     while (1) {
         fgets(msg, 128, stdin);
+        msg[strlen(msg) - 1] = '\0';
         if (gId >= 0) {
             sprintf(data, "T %d %s", gId, msg);
             sendMessageToServer(gServerIpAddress, gServerPort, data);
@@ -201,7 +202,8 @@ void parseMsg(char inputs[256]) {
         char com;
         memset(msg, '\0', 128);
 
-        sscanf(inputs, "%c %d %s", &com, &playerId, msg);
+        sscanf(inputs, "%c %d", &com, &playerId);
+        strcpy(msg, inputs + 3);
 
         if (playerId == -1) {
             puts("[T] Identifiant invalide");
@@ -209,8 +211,8 @@ void parseMsg(char inputs[256]) {
             printf("[%c] %s essaie d'envoyer un message vide.",
                    com,
                    gNames[playerId]);
-        } else {
-            printf("%s > %s\n", gNames[playerId], msg);
+        } else if (playerId != gId) {
+            printf("%s > %s", gNames[playerId], msg);
         }
     } break;
     }
