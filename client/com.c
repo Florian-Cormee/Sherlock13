@@ -66,7 +66,6 @@ void *fn_serveur_tcp(void *arg) {
             printf("read error\n");
             exit(1);
         }
-        // printf("%s",gbuffer);
 
         pthread_mutex_lock(&mutex);
         has_message = 1;

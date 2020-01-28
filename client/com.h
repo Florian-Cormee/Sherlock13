@@ -19,16 +19,16 @@ extern int gServerPort;
 extern char gClientIpAddress[256];
 /** Main client port number. */
 extern int gClientPort;
-/** Player Name. */
+/** Player's Name. */
 extern char gName[256];
-/** Tab of all the player name. */
+/** Array of all the player's name. */
 extern char gNames[4][256];
 /** Index of the player. */
 extern int gId;
 /** Index of the winner. */
 extern int gWinnerId;
 
-/** Flag for message from server. */ 
+/** Flag for message from server. */
 extern volatile int has_message;
 
 /**
@@ -39,25 +39,26 @@ extern volatile int has_message;
 void *fn_serveur_tcp(void *arg);
 
 /**
- * Send a message to server
+ * Send a message to the server
  *
- * @param ipAddress main server ip adress
+ * @param ipAddress main server ip address
  * @param portno main server port
  * @param mess message contents
  */
 void sendMessageToServer(char *ipAddress, int portno, char *mess);
 
 /**
- * Send a message to server for the chat
+ * Send a message to the server for the chat
  *
  * @param arg list of the arguments
  */
 void *fn_chat(void *arg);
+
 /** Initialize all the variables */
 void initCom();
 
 /**
- * Read a message from server
+ * Read a message from the server
  *
  * @param ipAddress main server ip adress
  * @param portno main server port

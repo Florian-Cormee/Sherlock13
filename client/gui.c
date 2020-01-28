@@ -14,8 +14,8 @@
 #include "cartes.h"
 #include "com.h"
 
-int joueurSel = -1;
-int objetSel = -1;
+int characterSel = -1;
+int objectSel = -1;
 int guiltSel = -1;
 int goEnabled = 0;
 int connectEnabled = 1;
@@ -67,14 +67,14 @@ void onMouseButtonDownEvent() {
         sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
         connectEnabled = 0;
     } else if ((mx >= 0) && (mx < 200) && (my >= 90) && (my < 330)) {
-        joueurSel = (my - 90) / 60;
+        characterSel = (my - 90) / 60;
         guiltSel = -1;
     } else if ((mx >= 200) && (mx < 680) && (my >= 0) && (my < 90)) {
-        objetSel = (mx - 200) / 60;
+        objectSel = (mx - 200) / 60;
         guiltSel = -1;
     } else if ((mx >= 100) && (mx < 250) && (my >= 350) && (my < 740)) {
-        joueurSel = -1;
-        objetSel = -1;
+        characterSel = -1;
+        objectSel = -1;
         guiltSel = (my - 350) / 30;
     } else if ((mx >= 250) && (mx < 300) && (my >= 350) && (my < 740)) {
         int ind = (my - 350) / 30;
@@ -82,45 +82,45 @@ void onMouseButtonDownEvent() {
     } else if ((mx >= 500) && (mx < 700) && (my >= 350) && (my < 450) &&
                (goEnabled == 1)) {
         printf(
-            "go! joueur=%d objet=%d guilt=%d\n", joueurSel, objetSel, guiltSel);
+            "go! joueur=%d objet=%d guilt=%d\n", playerSel, objectSel, guiltSel);
         if (guiltSel != -1) {
             // Accusation
             sprintf(sendBuffer, "G %d %d", gId, guiltSel);
 
             // RAJOUTER DU CODE ICI
             sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
-        } else if ((objetSel != -1) && (joueurSel == -1)) {
+        } else if ((objectSel != -1) && (characterSel == -1)) {
             // Qui possède un Objet
-            sprintf(sendBuffer, "O %d %d", gId, objetSel);
+            sprintf(sendBuffer, "O %d %d", gId, objectSel);
 
             // RAJOUTER DU CODE ICI
             sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
-        } else if ((objetSel != -1) && (joueurSel != -1)) {
+        } else if ((objectSel != -1) && (characterSel != -1)) {
             // Combien de fois le joueur possède l'Objet
-            sprintf(sendBuffer, "S %d %d %d", gId, joueurSel, objetSel);
+            sprintf(sendBuffer, "S %d %d %d", gId, playerSel, objectSel);
 
             // RAJOUTER DU CODE ICI
             sendMessageToServer(gServerIpAddress, gServerPort, sendBuffer);
         }
     } else {
-        joueurSel = -1;
-        objetSel = -1;
+        characterSel = -1;
+        objectSel = -1;
         guiltSel = -1;
     }
 }
 
 void highlightSelections(SDL_Renderer *renderer) {
     // Player selection
-    if (joueurSel != -1) {
+    if (characterSel != -1) {
         SDL_SetRenderDrawColor(renderer, 255, 180, 180, 255);
-        SDL_Rect rect1 = {0, 90 + joueurSel * 60, 200, 60};
+        SDL_Rect rect1 = {0, 90 + characterSel * 60, 200, 60};
         SDL_RenderFillRect(renderer, &rect1);
     }
 
     // Object selection
-    if (objetSel != -1) {
+    if (objectSel != -1) {
         SDL_SetRenderDrawColor(renderer, 180, 255, 180, 255);
-        SDL_Rect rect1 = {200 + objetSel * 60, 0, 60, 90};
+        SDL_Rect rect1 = {200 + objectSel * 60, 0, 60, 90};
         SDL_RenderFillRect(renderer, &rect1);
     }
 
@@ -193,7 +193,7 @@ void drawTextCharacters(SDL_Renderer *renderer, TTF_Font *Sans) {
     }
 }
 
-void drawTab(SDL_Renderer *renderer, TTF_Font *Sans) {
+void drawBoard(SDL_Renderer *renderer, TTF_Font *Sans) {
     SDL_Color col1 = {0, 0, 0};
     int i, j;
     for (i = 0; i < 4; i++)
@@ -383,7 +383,7 @@ void drawX(SDL_Renderer *renderer) {
     }
 }
 
-void drawGuessChart(SDL_Renderer *renderer) {
+void drawGuessBoard(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderDrawLine(renderer, 0, 30 + 60, 680, 30 + 60);
     SDL_RenderDrawLine(renderer, 0, 30 + 120, 680, 30 + 120);

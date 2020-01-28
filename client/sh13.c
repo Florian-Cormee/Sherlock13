@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
                "address> <Client port> <player name>\n");
         exit(1);
     }
-    // Reading of inputs
+    // Reading of the inputs
     strcpy(gServerIpAddress, argv[1]);
     gServerPort = atoi(argv[2]);
     strcpy(gClientIpAddress, argv[3]);
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 
     TTF_Font *Sans = TTF_OpenFont("client/font/sans.ttf", 15);
 
-    // Creation of the tcp server thread
+    // Creation of the tcp server threads
     printf("Creation du thread serveur tcp !\n");
     pthread_create(&thread_serveur_tcp_id, NULL, fn_serveur_tcp, NULL);
     pthread_create(&thread_chat_id, NULL, &fn_chat, NULL);
@@ -109,40 +109,40 @@ int main(int argc, char **argv) {
         SDL_SetRenderDrawColor(renderer, 255, 230, 230, 230);
         SDL_Rect rect = {0, 0, 1024, 768};
         SDL_RenderFillRect(renderer, &rect);
-        /** Draw of the graphic elements. */
+        // Draw of the graphic elements.
         highlightSelections(renderer);
         drawIcons(renderer, texture_objet);
         drawTextIcons(renderer, Sans);
         drawTextCharacters(renderer, Sans);
-        drawTab(renderer, Sans);
+        drawBoard(renderer, Sans);
         drawCharactersIcons(renderer, texture_objet);
-        // Afficher les suppositions
+        // Draw the guesses
         drawX(renderer);
-        drawGuessChart(renderer);
+        drawGuessBoard(renderer);
         drawHand(renderer, texture_deck);
 
-        // Le bouton go
+        // Go button
         if (goEnabled == 1) {
             SDL_Rect dstrect = {500, 350, 200, 150};
             SDL_RenderCopy(renderer, texture_gobutton, NULL, &dstrect);
         }
-        // Image de victoire / defaite
+        // V/D image
         if (gWinnerId != -2) {
             SDL_Rect dstrect = {500, 350, 200, 150};
             int winId = gWinnerId == gId ? 1 : 0;
             SDL_RenderCopy(renderer, texture_winImg[winId], NULL, &dstrect);
         }
-        // Le bouton connect
+        // Connect button
         if (connectEnabled == 1) {
             SDL_Rect dstrect = {0, 0, 200, 50};
             SDL_RenderCopy(renderer, texture_connectbutton, NULL, &dstrect);
         }
-        /** draw each name of players */ 
+        // Draw the name of each player
         drawPlayersName(renderer, Sans);
 
         SDL_RenderPresent(renderer);
     }
-    /** End of the program, free of the texture and surface. */
+    // End of the program, free of the texture and surface.
     for (i = 0; i < 13; i++) {
         SDL_DestroyTexture(texture_deck[i]);
         SDL_FreeSurface(deck[i]);
