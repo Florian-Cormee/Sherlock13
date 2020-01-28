@@ -3,17 +3,17 @@
 #include <stdio.h>
 #include "com.h"
 
-void broadcastCurrentPlayer(int t_currentPlayer) {
+void broadcastCurrentPlayer(int aCurrentPlayer) {
     char data[DATA_SIZE];
 
-    sprintf(data, M_PATTERN, t_currentPlayer);
+    sprintf(data, M_PATTERN, aCurrentPlayer);
     broadcastMessage(data);
 }
 
-void broadcastCardValue(int t_playerId, int t_objectId, int t_value) {
+void broadcastCardValue(int aPlayerId, int aObjectId, int aValue) {
     char data[DATA_SIZE];
 
-    sprintf(data, V_PATTERN, t_playerId, t_objectId, t_value);
+    sprintf(data, V_PATTERN, aPlayerId, aObjectId, aValue);
     broadcastMessage(data);
 }
 
@@ -29,56 +29,56 @@ void broadcastPlayerList() {
     broadcastMessage(data);
 }
 
-void broadcastWinner(int t_playerId, int t_guildId) {
+void broadcastWinner(int aPlayerId, int aCulpritId) {
     char data[DATA_SIZE];
 
-    sprintf(data, W_PATTERN, t_playerId, t_guildId);
+    sprintf(data, W_PATTERN, aPlayerId, aCulpritId);
 
     broadcastMessage(data);
 }
 
-void broadcastTalk(int t_playerId, char *t_msg) {
+void broadcastTalk(int aPlayerId, char *aMsg) {
     char data[DATA_SIZE];
 
-    sprintf(data, T_PATTERN, t_playerId, t_msg);
+    sprintf(data, T_PATTERN, aPlayerId, aMsg);
 
     broadcastMessage(data);
 }
 
-void sendId(int t_recipientId) {
+void sendId(int aRecipientId) {
     char data[DATA_SIZE];
 
-    sprintf(data, "I %d", t_recipientId);
-    sendMessageToClient(tcpClients[t_recipientId].ipAddress,
-                        tcpClients[t_recipientId].port,
+    sprintf(data, I_PATTERN, aRecipientId);
+    sendMessageToClient(tcpClients[aRecipientId].ipAddress,
+                        tcpClients[aRecipientId].port,
                         data);
 }
 
-void sendCards(int t_playerId, int t_cards[3]) {
+void sendCards(int aPlayerId, int aCards[3]) {
     char data[DATA_SIZE];
 
-    sprintf(data, D_PATTERN, t_cards[0], t_cards[1], t_cards[2]);
+    sprintf(data, D_PATTERN, aCards[0], aCards[1], aCards[2]);
     sendMessageToClient(
-        tcpClients[t_playerId].ipAddress, tcpClients[t_playerId].port, data);
+        tcpClients[aPlayerId].ipAddress, tcpClients[aPlayerId].port, data);
 }
 
-void sendCardValue(int t_recipientId,
-                   int t_playerId,
-                   int t_objectId,
-                   int t_value) {
+void sendCardValue(int aRecipientId,
+                   int aPlayerId,
+                   int aObjectId,
+                   int aValue) {
     char data[DATA_SIZE];
 
-    sprintf(data, V_PATTERN, t_playerId, t_objectId, t_value);
-    sendMessageToClient(tcpClients[t_recipientId].ipAddress,
-                        tcpClients[t_recipientId].port,
+    sprintf(data, V_PATTERN, aPlayerId, aObjectId, aValue);
+    sendMessageToClient(tcpClients[aRecipientId].ipAddress,
+                        tcpClients[aRecipientId].port,
                         data);
 }
 
-void sendExcluded(int t_playerId) {
+void sendExcluded(int aPlayerId) {
     char data[DATA_SIZE];
 
     sprintf(data, W_PATTERN, -1, -1);
 
     sendMessageToClient(
-        tcpClients[t_playerId].ipAddress, tcpClients[t_playerId].port, data);
+        tcpClients[aPlayerId].ipAddress, tcpClients[aPlayerId].port, data);
 }

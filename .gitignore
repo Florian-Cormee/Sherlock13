@@ -51,5 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# LaTeX
+rapport/*
+!rapport/*.tex
+!rapport/figs
+
 # IDE files
 .vscode/

@@ -17,7 +17,7 @@ endif
 
 all: client
 
-client: sh13.o
+client: sh13.o cartes.o com.o gui.o
 	@echo "Linking $^ & libraries.."
 	@$(CC) $(CFLAGS) -o $(CLIENT_NAME) $^ $(CLIBS)
 	@echo "Build of the client done!"

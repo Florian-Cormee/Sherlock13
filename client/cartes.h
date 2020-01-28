@@ -1,19 +1,18 @@
 #ifndef CARTES_H
 #define CARTES_H
 
-extern char *nbobjets[8] = {"5", "5", "5", "5", "4", "3", "3", "3"};
-extern char *nbnoms[13] = {"Sebastian Moran",
-                  "irene Adler",
-                  "inspector Lestrade",
-                  "inspector Gregson",
-                  "inspector Baynes",
-                  "inspector Bradstreet",
-                  "inspector Hopkins",
-                  "Sherlock Holmes",
-                  "John Watson",
-                  "Mycroft Holmes",
-                  "Mrs. Hudson",
-                  "Mary Morstan",
-                  "James Moriarty"};
+/** Name of each object. */
+extern char *nbobjets[8];
+/** Name of each character. */
+extern char *nbnoms[13];
+/** memo for accusation. */
+extern int guiltGuess[13];
+/** tab of player and symbole. */
+extern int tableCartes[4][8];
+/** indice of each character in the hand. */
+extern int hand[3];
+
+/** Initialize all the variables */
+void initCartes();
 
 #endif // !CARTES_H
